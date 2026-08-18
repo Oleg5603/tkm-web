@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Проверка расчёта ТКМ — для специалиста</title>
+  <link rel="stylesheet" href="assets/landing.css">
+  <style>
+    body{background:#f4f2ec;color:#17231f}.validation{max-width:1120px;margin:auto;padding:32px 20px 70px}
+    .validation header{margin-bottom:28px}.validation h1{font-size:clamp(2rem,5vw,4rem);line-height:1;margin:.3em 0}
+    .notice{background:#fff4d8;border:1px solid #e5c978;border-radius:18px;padding:18px;margin:24px 0}
+    .cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+    .case{background:#fff;border-radius:20px;padding:20px;box-shadow:0 8px 25px #18322812}.case h2{margin:0 0 8px}
+    .score{color:#49645b;margin:0 0 15px}.points{margin:0;padding-left:22px}.points li{margin:8px 0}.tag{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#806b2a}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}.actions a{display:inline-block;padding:12px 18px;border-radius:999px;background:#183c32;color:white;text-decoration:none}
+    .actions a.secondary{background:white;color:#183c32;border:1px solid #183c32}
+  </style>
+</head>
+<body><main class="validation">
+  <header><p class="tag">Экспертная приёмка · версия 19.08.2026</p><h1>Проверьте логику подбора</h1><p>Десять одиночных жалоб рассчитаны тем же алгоритмом, что и основная веб-версия. Лимит — 7 точек, признак острой боли выключен.</p></header>
+  <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До вашего подтверждения результат обозначен как черновик.</div>
+  <section class="cases" id="cases"></section>
+  <div class="actions"><a href="index.html#calculator">Открыть калькулятор</a><a class="secondary" href="mailto:?subject=Проверка%20алгоритма%20ТКМ">Отправить замечания</a></div>
+</main>
+<script>
+const cases=[
+['Бессонница','Сердце 3 · Почки 2 · Перикард 1',['C9 — тонизация','VB43 — тонизация «матери»','V65 — седация контролирующего элемента','R7 — тонизация','P9 — тонизация «матери»','MC9 — тонизация']],
+['Боль в пояснице','Почки 3 · Мочевой пузырь 2',['R7 — тонизация','P9 — тонизация «матери»','E45 — седация контролирующего элемента','V67 — тонизация']],
+['Головная боль в висках','Желчный пузырь 3 · Печень 2',['VB43 — тонизация','V67 — тонизация «матери»','P5 — седация контролирующего элемента','F8 — тонизация']],
+['Вздутие живота','Селезёнка 3 · Желудок 2 · Печень 1',['RP2 — тонизация','C9 — тонизация «матери»','VB38 — седация контролирующего элемента','E41 — тонизация','F8 — тонизация','V67 — тонизация «матери»']],
+['Боль в колене','Почки 3 · Печень 2 · Желчный пузырь 1',['R7 — тонизация','P9 — тонизация «матери»','E45 — седация контролирующего элемента','F8 — тонизация','V67 — тонизация «матери»','VB43 — тонизация']],
+['Тревога','Сердце 3 · Перикард 2',['C9 — тонизация','VB43 — тонизация «матери»','V65 — седация контролирующего элемента','MC9 — тонизация']],
+['Хроническая усталость','Почки 3 · Селезёнка 3 · Сердце 2',['R7 — тонизация','P9 — тонизация «матери»','E45 — седация контролирующего элемента','RP2 — тонизация','C9 — тонизация «матери»','VB43 — тонизация «матери»']],
+['Высокое давление','Печень 3 · Почки 2 · Желчный пузырь 1',['F8 — тонизация','V67 — тонизация «матери»','P5 — седация контролирующего элемента','R7 — тонизация','P9 — тонизация «матери»','VB43 — тонизация']],
+['Кашель сухой','Лёгкие 3 · Почки 2',['P9 — тонизация','E41 — тонизация «матери»','C7 — седация контролирующего элемента','R7 — тонизация']],
+['Головокружение','Желчный пузырь 2 · Печень 2 · Почки 1',['VB43 — тонизация','V67 — тонизация «матери»','P5 — седация контролирующего элемента','F8 — тонизация','R7 — тонизация','P9 — тонизация «матери»']]
+];
+document.querySelector('#cases').innerHTML=cases.map(([name,scores,points],i)=>`<article class="case"><p class="tag">Кейс ${i+1}</p><h2>${name}</h2><p class="score">${scores}</p><ol class="points">${points.map(x=>`<li>${x}</li>`).join('')}</ol></article>`).join('');
+</script></body></html>

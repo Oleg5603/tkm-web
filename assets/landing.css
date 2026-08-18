@@ -1,0 +1,398 @@
+.benefits {
+  padding: 100px 0 30px;
+}
+
+.benefits-heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 70px;
+  align-items: end;
+}
+
+.benefits-heading .eyebrow {
+  grid-column: 1 / -1;
+}
+
+.benefits-heading h2 {
+  margin: 0;
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  line-height: 1.05;
+}
+
+.benefits-heading > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 45px;
+}
+
+.benefit-grid article {
+  min-height: 230px;
+  padding: 25px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.benefit-grid span {
+  color: var(--gold);
+  font: 1.2rem Georgia, serif;
+}
+
+.benefit-grid h3 {
+  margin: 36px 0 8px;
+}
+
+.benefit-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 36px 0 26px;
+}
+
+.mode-tabs button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 12px;
+  padding: 16px;
+  border: 1px solid #ccd6d0;
+  border-radius: 16px;
+  color: var(--ink);
+  background: #f8faf7;
+  text-align: left;
+}
+
+.mode-tabs button.active {
+  border-color: var(--jade);
+  box-shadow: inset 0 0 0 1px var(--jade);
+}
+
+.mode-tabs span {
+  grid-row: 1 / 3;
+  color: var(--gold);
+  font: 1.15rem Georgia, serif;
+}
+
+.mode-tabs b {
+  font-size: .95rem;
+}
+
+.mode-tabs small {
+  color: var(--muted);
+}
+
+.mode-tabs button:disabled {
+  opacity: .58;
+}
+
+.quick-choices {
+  margin-top: 0;
+}
+
+.calculator {
+  display: grid;
+  grid-template-columns: 1.45fr .55fr;
+  gap: 18px;
+}
+
+.symptom-panel,
+.protocol-settings {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.symptom-suggestions {
+  display: flex;
+  min-height: 48px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 22px;
+}
+
+.symptom-suggestions button,
+.selected-symptoms button {
+  border: 1px solid #cbd6cf;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--jade-dark);
+  background: #f8faf7;
+  cursor: pointer;
+}
+
+.selected-block {
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.selected-block > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: .84rem;
+  font-weight: 750;
+}
+
+.selected-block > div:first-child button {
+  border: 0;
+  color: var(--muted);
+  background: none;
+  cursor: pointer;
+}
+
+.selected-symptoms {
+  display: flex;
+  min-height: 38px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selected-symptoms button {
+  border-color: var(--jade);
+  color: #fff;
+  background: var(--jade);
+}
+
+.protocol-settings h3 {
+  margin-top: 0;
+}
+
+.protocol-settings > label:not(.acute-check) {
+  display: grid;
+  gap: 7px;
+  font-size: .84rem;
+  font-weight: 750;
+}
+
+.protocol-settings select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+}
+
+.acute-check {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  margin: 18px 0;
+}
+
+.acute-check span {
+  display: grid;
+}
+
+.acute-check small,
+.protocol-settings > p {
+  color: var(--muted);
+}
+
+.calculate {
+  width: 100%;
+}
+
+.protocol-settings > p {
+  margin-bottom: 0;
+  font-size: .76rem;
+}
+
+.protocol-result {
+  padding-top: 65px;
+  scroll-margin-top: 20px;
+}
+
+.download-result {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 16px;
+  color: #fff;
+  background: var(--jade);
+  cursor: pointer;
+}
+
+.priority-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.priority-summary div {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #e2ebe5;
+}
+
+.priority-summary span {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.protocol-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.protocol-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 185px 1fr;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+}
+
+.protocol-number {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #fff;
+  background: #173f3bda;
+  font-size: .73rem;
+}
+
+.point-image {
+  width: 185px;
+  min-height: 230px;
+  border: 0;
+  padding: 0;
+  background: #e9ede8;
+  cursor: pointer;
+}
+
+.point-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.point-image.placeholder {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  color: var(--muted);
+  text-align: center;
+  font-size: .8rem;
+}
+
+.protocol-body {
+  padding: 20px;
+}
+
+.protocol-body > span {
+  color: var(--jade);
+  font-size: .75rem;
+  font-weight: 800;
+}
+
+.protocol-body h3 {
+  margin: 7px 0;
+}
+
+.protocol-body p {
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: .86rem;
+}
+
+.protocol-body .action {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: #176146;
+  background: #dff1e7;
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.protocol-body .action.седация {
+  color: #744d18;
+  background: #f5e9d5;
+}
+
+.protocol-body .action.обезболивание {
+  color: #873c39;
+  background: #f7dfdd;
+}
+
+.protocol-body > button {
+  border: 0;
+  padding: 0;
+  color: var(--jade);
+  background: none;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.source-note {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+@media (max-width: 850px) {
+  .benefits-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .benefit-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .calculator,
+  .protocol-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .priority-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .benefits {
+    padding: 70px 0 20px;
+  }
+
+  .benefit-grid,
+  .mode-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .priority-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .protocol-card {
+    grid-template-columns: 1fr;
+  }
+
+  .point-image {
+    width: 100%;
+    min-height: 250px;
+  }
+}
