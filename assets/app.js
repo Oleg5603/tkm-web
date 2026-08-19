@@ -2,7 +2,32 @@ const state={engine:null,selected:[],protocol:[],scores:[]};
 const $=selector=>document.querySelector(selector);
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const normalize=value=>String(value??'').toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[-–—.]/g,' ').replace(/\s+/g,' ').trim();
-const clean=value=>String(value??'').replace(/www\.eledia\.ru/gi,'').replace(/^\s*\d+\s*/,'').replace(/\s+/g,' ').trim();
+const trialKey='tkm_trial_profile_v1';
+const trialDuration=10*24*60*60*1000;
+
+function getTrial(){try{return JSON.parse(localStorage.getItem(trialKey)||'null')}catch{return null}}
+function trialActive(profile=getTrial()){return Boolean(profile?.expiresAt&&Date.now()<profile.expiresAt)}
+function updateTrialUi(){
+  const profile=getTrial(),chip=$('#trialChip');
+  if(!profile){chip.hidden=true;return}
+  const days=Math.max(0,Math.ceil((profile.expiresAt-Date.now())/86400000));
+  chip.hidden=false;chip.classList.toggle('expired',days===0);
+  chip.textContent=days?`Демо: осталось ${days} дн.`:'Демодоступ завершён';
+  $('#paymentName').value=profile.name||'';$('#paymentEmail').value=profile.email||'';$('#paymentPhone').value=profile.phone||'';
+}
+function requireTrial(){
+  if(trialActive())return true;
+  const expired=Boolean(getTrial());
+  $('#accessLead').textContent=expired?'10-дневный демодоступ завершён. Для продолжения потребуется оплата после подключения Robokassa.':'Регистрация займёт меньше минуты. Данные сохраняются только на этом устройстве и пока не отправляются на сервер.';
+  $('#accessForm').querySelectorAll('input,button').forEach(control=>control.disabled=expired);
+  $('#accessStatus').textContent=expired?'Форма оплаты подготовлена ниже; приём платежей пока выключен.':'';
+  if(!$('#accessDialog').open)$('#accessDialog').showModal();
+  return false;
+}
+function pointVisual(point){
+  const code=escapeHtml(point.code);
+  return `<div class="point-visual" role="img" aria-label="Справочная карточка точки ${code}"><svg viewBox="0 0 180 210" aria-hidden="true"><path d="M90 19c-20 0-31 15-31 34 0 13 6 22 13 30l-10 39-20 69m48-108v108m18-108 10 39 20 69"/><circle cx="90" cy="50" r="23"/><circle cx="90" cy="112" r="9"/><path d="M55 104h70"/><text x="90" y="116">${code}</text></svg><strong>${code}</strong><small>Справочная схема. Точную локализацию проверяет специалист.</small></div>`;
+}
 
 function symptomNames(){return state.engine?Object.keys(state.engine.symptoms):[]}
 
@@ -82,6 +107,7 @@ function buildProtocol(scores,acutePain,pointLimit){
 }
 
 function calculate(){
+  if(!requireTrial())return;
   if(!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
   state.scores=analyzeSymptoms(state.selected);
   const value=$('#pointLimit').value;
@@ -94,7 +120,7 @@ function renderProtocol(){
   const top=state.scores.slice(0,3);
   $('#prioritySummary').innerHTML=`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
-    return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div><div class="point-image placeholder">Схема из открытого источника готовится</div><div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
+    return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div>${pointVisual(point)}<div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
   }).join('')||'<div class="empty">Для выбранных данных точки не сформированы.</div>';
   $('#protocolResult').hidden=false;
   $('#protocolResult').scrollIntoView({behavior:'smooth',block:'start'});
@@ -102,7 +128,7 @@ function renderProtocol(){
 
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2><p class="source-note">Схема локализации будет добавлена после проверки открытого источника и лицензии.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2><p class="source-note">Схема носит справочный характер и не показывает точную локализацию.</p><h3>Почему точка включена в протокол</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
@@ -113,10 +139,10 @@ function reportText(){
 function download(name,type,content){const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
 function exportProtocol(kind){
   if(!state.protocol.length)return;
-  const text=reportText();
-  if(kind==='txt')download('chernovik-tkm.txt','text/plain;charset=utf-8',text);
-  if(kind==='word')download('chernovik-tkm.doc','application/msword;charset=utf-8',`<!doctype html><meta charset="utf-8"><body><pre style="white-space:pre-wrap;font-family:Arial">${escapeHtml(text)}</pre></body>`);
-  if(kind==='pdf'){const win=open('','_blank');win.document.write(`<!doctype html><meta charset="utf-8"><title>Черновик ТКМ</title><style>body{font-family:Arial;max-width:800px;margin:40px auto;white-space:pre-wrap}</style>${escapeHtml(text)}`);win.document.close();setTimeout(()=>win.print(),500)}
+  const text=reportText().replace('ЧЕРНОВИК ПРОТОКОЛА ТКМ','ПРЕДВАРИТЕЛЬНЫЙ ПРОТОКОЛ ТКМ');
+  if(kind==='txt')download('protokol-tkm.txt','text/plain;charset=utf-8',text);
+  if(kind==='word')download('protokol-tkm.doc','application/msword;charset=utf-8',`<!doctype html><meta charset="utf-8"><body><pre style="white-space:pre-wrap;font-family:Arial">${escapeHtml(text)}</pre></body>`);
+  if(kind==='pdf'){const win=open('','_blank');win.document.write(`<!doctype html><meta charset="utf-8"><title>Предварительный протокол ТКМ</title><style>body{font-family:Arial;max-width:800px;margin:40px auto;white-space:pre-wrap}</style>${escapeHtml(text)}`);win.document.close();setTimeout(()=>win.print(),500)}
   $('#exportDialog').close();
 }
 
@@ -131,12 +157,26 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-close-dialog]'))event.target.closest('dialog').close();
   const exportButton=event.target.closest('[data-export]');if(exportButton)exportProtocol(exportButton.dataset.export);
 });
-document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close()}));
+document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog&&!dialog.hasAttribute('data-static-dialog'))dialog.close()}));
+$('#accessDialog').addEventListener('cancel',event=>event.preventDefault());
+$('#accessForm').addEventListener('submit',event=>{
+  event.preventDefault();
+  if(getTrial())return;
+  const startedAt=Date.now();
+  const profile={name:$('#accessName').value.trim(),email:$('#accessEmail').value.trim(),phone:$('#accessPhone').value.trim(),startedAt,expiresAt:startedAt+trialDuration};
+  localStorage.setItem(trialKey,JSON.stringify(profile));
+  $('#accessStatus').textContent='Доступ открыт на 10 дней.';updateTrialUi();
+  setTimeout(()=>$('#accessDialog').close(),500);
+});
+$('#paymentForm').addEventListener('submit',event=>event.preventDefault());
 
 const metricKey='tkm_web_visits';const visits=Number(localStorage.getItem(metricKey)||0)+1;localStorage.setItem(metricKey,String(visits));$('#localVisits').textContent=visits;
 const started=Date.now();setInterval(()=>{const seconds=Math.floor((Date.now()-started)/1000);$('#sessionTime').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`},1000);
 
-fetch('assets/tkm-engine-data.json')
+updateTrialUi();
+if(!trialActive())setTimeout(requireTrial,250);
+
+fetch('assets/tkm-engine-data.json?v=20260819-2')
   .then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})
   .then(engine=>{state.engine=engine;renderSelected()})
   .catch(()=>{$('#symptomSuggestions').innerHTML='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';$('#calculateProtocol').disabled=true});

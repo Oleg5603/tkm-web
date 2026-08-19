@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>ТКМ — подбор точек с объяснением</title>
-  <meta name="description" content="Веб-приложение ТКМ помогает систематизировать жалобы, определить связанные меридианы и подготовить объяснимый черновик протокола точек.">
+  <meta name="description" content="Веб-приложение ТКМ помогает систематизировать жалобы, определить связанные меридианы и подготовить объяснимый предварительный протокол точек.">
   <meta name="robots" content="noindex,nofollow">
-  <link rel="stylesheet" href="assets/styles.css">
-  <link rel="stylesheet" href="assets/landing.css">
+  <link rel="stylesheet" href="assets/styles.css?v=20260819-2">
+  <link rel="stylesheet" href="assets/landing.css?v=20260819-2">
 </head>
 <body>
   <header class="site-header">
@@ -27,7 +27,7 @@
         <div class="hero-copy">
           <p class="eyebrow">ТКМ · справочно-расчётный помощник</p>
           <h1>От жалоб к точкам <em>с понятным объяснением</em></h1>
-          <p class="lead">Систематизируйте исходные данные, увидьте связанные меридианы и подготовьте черновик протокола для проверки специалистом — в одном понятном веб-приложении.</p>
+          <p class="lead">Систематизируйте исходные данные, увидьте связанные меридианы и подготовьте предварительный протокол для проверки специалистом — в одном понятном веб-приложении.</p>
           <div class="hero-actions">
             <a class="button primary" href="#picker">Открыть приложение</a>
             <a class="button quiet" href="#benefits">Посмотреть преимущества</a>
@@ -43,10 +43,10 @@
     </section>
 
     <section class="benefits wrap" id="benefits">
-      <div class="benefits-heading"><p class="eyebrow dark">Зачем нужен ТКМ</p><h2>Меньше рутины.<br>Больше ясности.</h2><p>Приложение собирает разрозненные сведения в последовательный черновик и показывает логику каждого шага. Окончательное решение всегда остаётся за специалистом.</p></div>
+      <div class="benefits-heading"><p class="eyebrow dark">Зачем нужен ТКМ</p><h2>Меньше рутины.<br>Больше ясности.</h2><p>Приложение собирает разрозненные сведения в последовательный предварительный протокол и показывает логику каждого шага. Окончательное решение всегда остаётся за специалистом.</p></div>
       <div class="benefit-grid">
         <article><span>01</span><h3>Всё в одном процессе</h3><p>Жалобы, меридианы, точки, объяснения и экспорт результата без ручного переноса между таблицами.</p></article>
-        <article><span>02</span><h3>Не «чёрный ящик»</h3><p>Рядом с каждой точкой отображаются её тип, действие и правило, по которому она попала в черновик.</p></article>
+        <article><span>02</span><h3>Не «чёрный ящик»</h3><p>Рядом с каждой точкой отображаются её тип, действие и правило включения в протокол.</p></article>
         <article><span>03</span><h3>Готово к проверке</h3><p>Результат оформляется как структурированная памятка, которую удобно проверить, сохранить или обсудить.</p></article>
         <article><span>04</span><h3>Бережно к данным</h3><p>В MVP обработка выполняется в браузере без регистрации и отправки жалоб на сервер.</p></article>
       </div>
@@ -56,19 +56,19 @@
       <div class="intro-heading">
         <p class="eyebrow dark">Как это работает</p>
         <h2>От вопроса до понятной памятки</h2>
-        <p>Веб-приложение анализирует выбранные жалобы, ранжирует связанные меридианы и объяснимо формирует черновик точек.</p>
+        <p>Веб-приложение анализирует выбранные жалобы, ранжирует связанные меридианы и объяснимо формирует предварительный протокол.</p>
       </div>
       <div class="steps">
         <article><span>01</span><div><h3>Исходные данные</h3><p>Одна или несколько выбранных жалоб.</p></div></article>
         <article><span>02</span><div><h3>Расчёт и объяснение</h3><p>Связанные меридианы, ранжированные точки и причина выбора.</p></div></article>
-        <article><span>03</span><div><h3>Проверка результата</h3><p>Черновик на 5, 7, 9 или все релевантные точки проверяет специалист.</p></div></article>
+        <article><span>03</span><div><h3>Проверка результата</h3><p>Протокол на 5, 7, 9 или все релевантные точки проверяет специалист.</p></div></article>
       </div>
     </section>
 
     <section class="picker-section" id="picker">
       <div class="wrap picker-shell">
         <div class="picker-heading">
-          <div><p class="eyebrow dark">Веб-приложение ТКМ</p><h2>Начните с жалоб</h2><p>Выберите один или несколько симптомов. Приложение рассчитает веса меридианов и соберёт объяснимый черновик по правилам исходной Windows-версии.</p></div>
+          <div><p class="eyebrow dark">Веб-приложение ТКМ</p><h2>Начните с жалоб</h2><p>Выберите один или несколько симптомов. Приложение рассчитает веса меридианов и соберёт объяснимый предварительный протокол по правилам исходной Windows-версии.</p></div>
           <span class="source-badge">Результат требует проверки специалистом</span>
         </div>
 
@@ -84,25 +84,39 @@
             <div class="selected-block"><div><span>Выбранные жалобы</span><button id="clearSymptoms" type="button">Очистить</button></div><div id="selectedSymptoms" class="selected-symptoms"><small>Пока ничего не выбрано</small></div></div>
           </div>
           <aside class="protocol-settings">
-            <h3>Настройки черновика</h3>
+            <h3>Настройки протокола</h3>
             <label><span>Количество точек</span><select id="pointLimit"><option value="5">5 точек</option><option value="7">7 точек</option><option value="9">9 точек</option><option value="all">Все релевантные</option></select></label>
             <label class="acute-check"><input id="acutePain" type="checkbox"><span><b>Острая боль или спазм</b><small>Добавить Xi-точку ведущего меридиана</small></span></label>
-            <button id="calculateProtocol" class="button primary calculate" type="button">Рассчитать черновик</button>
+            <button id="calculateProtocol" class="button primary calculate" type="button">Сформировать протокол</button>
             <p>Расчёт выполняется локально в браузере. Жалобы никуда не отправляются.</p>
           </aside>
         </div>
 
         <section id="protocolResult" class="protocol-result" hidden aria-live="polite">
-          <div class="result-head"><div><span>Результат расчёта</span><h2>Черновик протокола</h2></div><button type="button" class="download-result" data-open-export>Скачать памятку</button></div>
+          <div class="result-head"><div><span>Результат расчёта</span><h2>Предварительный протокол</h2></div><button type="button" class="download-result" data-open-export>Скачать памятку</button></div>
           <div id="prioritySummary" class="priority-summary"></div>
           <div id="protocolGrid" class="protocol-grid"></div>
         </section>
       </div>
     </section>
 
+    <section class="payment-section" id="payment">
+      <div class="wrap payment-grid">
+        <div><p class="eyebrow dark">Продление доступа</p><h2>Продолжить работу после 10 бесплатных дней</h2><p>Регистрация открывает полный демодоступ на этом устройстве. Оплата через Robokassa появится после подключения защищённого платёжного кабинета.</p></div>
+        <form id="paymentForm" class="payment-form">
+          <label><span>Тариф</span><select id="paymentPlan"><option>Постоянный доступ</option><option>Продление доступа</option></select></label>
+          <label><span>Имя</span><input id="paymentName" autocomplete="name" required></label>
+          <label><span>Email</span><input id="paymentEmail" type="email" autocomplete="email" required></label>
+          <label><span>Телефон</span><input id="paymentPhone" type="tel" autocomplete="tel" required></label>
+          <button class="button primary" type="submit" disabled>Перейти к оплате — скоро</button>
+          <p>Данные карты здесь не вводятся. После подключения платёж откроется на защищённой странице Robokassa.</p>
+        </form>
+      </div>
+    </section>
+
     <section class="about wrap">
       <div><p class="eyebrow dark">О приложении</p><h2>Помощник, а не самостоятельный врач</h2></div>
-      <div class="about-copy"><p>ТКМ систематизирует жалобы, определяет приоритетные меридианы и готовит объяснимый черновик протокола. Каждую предложенную точку сопровождает логика выбора; схемы расположения добавляются только после проверки источника и лицензии.</p><p>Приложение не ставит диагноз и не назначает лечение: результат проверяет квалифицированный специалист.</p></div>
+      <div class="about-copy"><p>ТКМ систематизирует жалобы, определяет приоритетные меридианы и готовит объяснимый предварительный протокол. Каждую предложенную точку сопровождает логика выбора; точная локализация добавляется только после проверки источника и лицензии.</p><p>Приложение не ставит диагноз и не назначает лечение: результат проверяет квалифицированный специалист.</p></div>
     </section>
 
     <section class="safety wrap" role="note"><span>i</span><div><strong>Важно знать</strong><p>Не выполняйте иглоукалывание и другие инвазивные процедуры самостоятельно. При боли, ухудшении состояния или тревожных симптомах обратитесь к врачу. Фактический результат индивидуален и не гарантируется.</p></div></section>
@@ -111,7 +125,20 @@
   <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="#top"><span>Т</span>ТКМ</a><p>Понятный помощник по подбору точек.</p></div><div class="metrics"><span>Открытий на устройстве: <b id="localVisits">—</b></span><span>Время знакомства: <b id="sessionTime">00:00</b></span><small>Данные остаются только на этом устройстве.</small></div></div></footer>
 
   <dialog id="detailDialog" class="dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><div id="dialogContent"></div></dialog>
-  <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать черновик</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
-  <script src="assets/app.js" defer></script>
+  <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать протокол</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
+  <dialog id="accessDialog" class="dialog access-dialog" aria-labelledby="accessTitle" data-static-dialog>
+    <p class="eyebrow dark">Бесплатный доступ на 10 дней</p><h2 id="accessTitle">Представьтесь, чтобы открыть ТКМ</h2>
+    <p id="accessLead">Регистрация займёт меньше минуты. Данные сохраняются только на этом устройстве и пока не отправляются на сервер.</p>
+    <form id="accessForm" class="access-form">
+      <label><span>Имя</span><input id="accessName" name="name" autocomplete="name" required minlength="2"></label>
+      <label><span>Email</span><input id="accessEmail" name="email" type="email" autocomplete="email" required></label>
+      <label><span>Телефон</span><input id="accessPhone" name="phone" type="tel" autocomplete="tel" required minlength="7"></label>
+      <label class="consent"><input id="accessConsent" type="checkbox" required><span>Согласен на локальное сохранение этих данных и условия 10-дневного демодоступа.</span></label>
+      <button class="button primary" type="submit">Получить 10 дней бесплатно</button>
+      <p id="accessStatus" class="form-status" aria-live="polite"></p>
+    </form>
+  </dialog>
+  <div class="trial-chip" id="trialChip" hidden></div>
+  <script src="assets/app.js?v=20260819-2" defer></script>
 </body>
 </html>
