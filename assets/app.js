@@ -1,4 +1,4 @@
-const state={engine:null,atlas:[],selected:[],protocol:[],scores:[]};
+const state={engine:null,selected:[],protocol:[],scores:[]};
 const $=selector=>document.querySelector(selector);
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const normalize=value=>String(value??'').toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[-–—.]/g,' ').replace(/\s+/g,' ').trim();
@@ -81,13 +81,6 @@ function buildProtocol(scores,acutePain,pointLimit){
   return pointLimit==null?points:points.slice(0,pointLimit===0?5:pointLimit);
 }
 
-function comparable(value){return String(value).toUpperCase().replace(/[РСЕ]/g,char=>({Р:'P',С:'C',Е:'E'}[char])).replace(/([A-Z]+)\s*[.·-]\s*(\d+)/g,'$1$2')}
-function atlasMatch(code){
-  const needle=comparable(code).replace(/[^A-Z0-9]/g,'');
-  const pattern=new RegExp(`(^|[^A-Z])${needle}(?!\\d)`);
-  return state.atlas.find(item=>pattern.test(comparable(`${item.title} ${item.description}`)))||null;
-}
-
 function calculate(){
   if(!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
   state.scores=analyzeSymptoms(state.selected);
@@ -101,8 +94,7 @@ function renderProtocol(){
   const top=state.scores.slice(0,3);
   $('#prioritySummary').innerHTML=`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
-    const atlas=atlasMatch(point.code);
-    return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div>${atlas?`<button type="button" class="point-image" data-point-detail="${index}"><img src="${escapeHtml(atlas.image)}" alt="Расположение точки ${escapeHtml(point.code)} по Атласу Леднёва" loading="lazy"></button>`:'<div class="point-image placeholder">Схема локализации уточняется</div>'}<div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
+    return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div><div class="point-image placeholder">Схема из открытого источника готовится</div><div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
   }).join('')||'<div class="empty">Для выбранных данных точки не сформированы.</div>';
   $('#protocolResult').hidden=false;
   $('#protocolResult').scrollIntoView({behavior:'smooth',block:'start'});
@@ -110,8 +102,7 @@ function renderProtocol(){
 
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
-  const atlas=atlasMatch(point.code);
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${atlas?`<img class="detail-image" src="${escapeHtml(atlas.image)}" alt="Локализация точки ${escapeHtml(point.code)}"><p class="source-note">Иллюстрация: Атлас Леднёва, страница ${atlas.page}</p>`:''}<h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2><p class="source-note">Схема локализации будет добавлена после проверки открытого источника и лицензии.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
@@ -142,10 +133,10 @@ document.addEventListener('click',event=>{
 });
 document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close()}));
 
-const metricKey='tkm_lednev_visits';const visits=Number(localStorage.getItem(metricKey)||0)+1;localStorage.setItem(metricKey,String(visits));$('#localVisits').textContent=visits;
+const metricKey='tkm_web_visits';const visits=Number(localStorage.getItem(metricKey)||0)+1;localStorage.setItem(metricKey,String(visits));$('#localVisits').textContent=visits;
 const started=Date.now();setInterval(()=>{const seconds=Math.floor((Date.now()-started)/1000);$('#sessionTime').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`},1000);
 
-Promise.all([
-  fetch('assets/tkm-engine-data.json').then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()}),
-  fetch('assets/atlas-data.json').then(response=>{if(!response.ok)throw new Error(`Atlas HTTP ${response.status}`);return response.json()})
-]).then(([engine,atlas])=>{state.engine=engine;state.atlas=atlas.items||[];renderSelected()}).catch(()=>{$('#symptomSuggestions').innerHTML='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';$('#calculateProtocol').disabled=true});
+fetch('assets/tkm-engine-data.json')
+  .then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})
+  .then(engine=>{state.engine=engine;renderSelected()})
+  .catch(()=>{$('#symptomSuggestions').innerHTML='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';$('#calculateProtocol').disabled=true});
