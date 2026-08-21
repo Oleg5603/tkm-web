@@ -1,0 +1,24 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+
+const html = fs.readFileSync('index.html', 'utf8');
+const app = fs.readFileSync('assets/app.js', 'utf8');
+const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
+const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
+
+assert.match(html, /data-mode="diagnosis"/);
+assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
+assert.match(html, /id="diagnosisSearch"/);
+assert.equal(Object.keys(diagnoses).length, 63);
+assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
+assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
+assert.match(app, /setTimeout\(render,80\)/);
+
+const normalize = value => String(value ?? '').toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').replace(/[-–—.]/g, ' ').replace(/\s+/g, ' ').trim();
+const started = performance.now();
+const index = Object.keys(data.symptoms).map(name => ({name, search: normalize(name)}));
+for (let i = 0; i < 1000; i += 1) index.filter(item => item.search.includes('бол'));
+const elapsed = performance.now() - started;
+assert.ok(elapsed / 1000 < 1.5, `Один поиск слишком медленный: ${(elapsed / 1000).toFixed(3)} мс`);
+
+console.log(`OK: diagnoses=63, symptoms=${index.length}, search1000=${elapsed.toFixed(1)}ms`);

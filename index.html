@@ -7,7 +7,7 @@
   <meta name="description" content="Веб-приложение ТКМ помогает систематизировать жалобы, определить связанные меридианы и подготовить объяснимый черновик протокола точек.">
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="assets/styles.css">
-  <link rel="stylesheet" href="assets/landing.css">
+  <link rel="stylesheet" href="assets/landing.css?v=20260821-1">
 </head>
 <body>
   <header class="site-header">
@@ -73,8 +73,8 @@
         </div>
 
         <div class="mode-tabs" aria-label="Режим работы">
-          <button class="active" type="button"><span>01</span><b>По жалобам</b><small>Расчётное ядро подключено</small></button>
-          <button type="button" disabled><span>02</span><b>По диагнозу</b><small>После экспертной проверки</small></button>
+          <button class="active" type="button" data-mode="symptoms" aria-pressed="true"><span>01</span><b>По жалобам</b><small>Быстрый поиск симптомов</small></button>
+          <button type="button" data-mode="diagnosis" aria-pressed="false"><span>02</span><b>По диагнозу</b><small>63 справочных диагноза</small></button>
         </div>
 
         <div class="calculator">
@@ -82,6 +82,12 @@
             <label class="search-field"><span>Найдите симптом</span><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.15A7.5 7.5 0 1 1 4 11.5a7.5 7.5 0 0 1 15 0Z"/></svg><input id="symptomSearch" type="search" placeholder="Например: бессонница" autocomplete="off"></div></label>
             <div id="symptomSuggestions" class="symptom-suggestions" aria-live="polite"></div>
             <div class="selected-block"><div><span>Выбранные жалобы</span><button id="clearSymptoms" type="button">Очистить</button></div><div id="selectedSymptoms" class="selected-symptoms"><small>Пока ничего не выбрано</small></div></div>
+          </div>
+          <div class="diagnosis-panel" hidden>
+            <label class="search-field"><span>Найдите диагноз</span><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.15A7.5 7.5 0 1 1 4 11.5a7.5 7.5 0 0 1 15 0Z"/></svg><input id="diagnosisSearch" type="search" placeholder="Например: гипертония" autocomplete="off"></div></label>
+            <div id="diagnosisSuggestions" class="symptom-suggestions" aria-live="polite"></div>
+            <div class="selected-block"><div><span>Выбранный диагноз</span><button id="clearDiagnosis" type="button">Очистить</button></div><div id="selectedDiagnosis" class="selected-symptoms"><small>Пока ничего не выбрано</small></div></div>
+            <p class="diagnosis-note">Диагноз должен быть установлен врачом. Приложение использует его только как вход для справочного расчёта.</p>
           </div>
           <aside class="protocol-settings">
             <h3>Настройки черновика</h3>
@@ -112,6 +118,6 @@
 
   <dialog id="detailDialog" class="dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><div id="dialogContent"></div></dialog>
   <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать черновик</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
-  <script src="assets/app.js" defer></script>
+  <script src="assets/app.js?v=20260821-1" defer></script>
 </body>
 </html>

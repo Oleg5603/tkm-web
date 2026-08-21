@@ -1,26 +1,57 @@
-const state={engine:null,selected:[],protocol:[],scores:[]};
+const state={engine:null,mode:'symptoms',selected:[],diagnosis:null,protocol:[],scores:[],symptomIndex:[],diagnosisIndex:[],searchTimer:null};
 const $=selector=>document.querySelector(selector);
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const normalize=value=>String(value??'').toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[-–—.]/g,' ').replace(/\s+/g,' ').trim();
 const clean=value=>String(value??'').replace(/www\.eledia\.ru/gi,'').replace(/^\s*\d+\s*/,'').replace(/\s+/g,' ').trim();
 
-function symptomNames(){return state.engine?Object.keys(state.engine.symptoms):[]}
+function buildSearchIndex(items){return Object.keys(items||{}).map(name=>({name,search:normalize(name)}))}
 
 function renderSuggestions(){
   const query=normalize($('#symptomSearch').value);
   const selected=new Set(state.selected);
-  let names=symptomNames().filter(name=>!selected.has(name));
-  if(query)names=names.filter(name=>normalize(name).includes(query));
+  let names=state.symptomIndex.filter(item=>!selected.has(item.name));
+  if(query)names=names.filter(item=>item.search.includes(query));
   else{
     const popular=['Бессонница','Головная боль в висках','Боль в пояснице','Вздутие живота','Боль в колене','Тревога','Хроническая усталость','Высокое давление'];
-    names=popular.filter(name=>names.includes(name));
+    const available=new Set(names.map(item=>item.name));
+    names=popular.filter(name=>available.has(name)).map(name=>({name}));
   }
-  $('#symptomSuggestions').innerHTML=names.slice(0,12).map(name=>`<button type="button" data-add-symptom="${escapeHtml(name)}">+ ${escapeHtml(name)}</button>`).join('')||'<small>Совпадений не найдено. Попробуйте сократить запрос.</small>';
+  $('#symptomSuggestions').innerHTML=names.slice(0,12).map(item=>`<button type="button" data-add-symptom="${escapeHtml(item.name)}">+ ${escapeHtml(item.name)}</button>`).join('')||'<small>Совпадений не найдено. Попробуйте сократить запрос.</small>';
+}
+
+function renderDiagnosisSuggestions(){
+  const query=normalize($('#diagnosisSearch').value);
+  let names=state.diagnosisIndex;
+  if(query)names=names.filter(item=>item.search.includes(query));
+  $('#diagnosisSuggestions').innerHTML=names.slice(0,12).map(item=>`<button type="button" data-select-diagnosis="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>`).join('')||'<small>Совпадений не найдено. Попробуйте сократить запрос.</small>';
+}
+
+function scheduleSearch(render){
+  clearTimeout(state.searchTimer);
+  state.searchTimer=setTimeout(render,80);
 }
 
 function renderSelected(){
   $('#selectedSymptoms').innerHTML=state.selected.length?state.selected.map(name=>`<button type="button" data-remove-symptom="${escapeHtml(name)}">${escapeHtml(name)} <span>×</span></button>`).join(''):'<small>Пока ничего не выбрано</small>';
   renderSuggestions();
+}
+
+function renderSelectedDiagnosis(){
+  $('#selectedDiagnosis').innerHTML=state.diagnosis?`<button type="button" data-clear-diagnosis>${escapeHtml(state.diagnosis)} <span>×</span></button>`:'<small>Пока ничего не выбрано</small>';
+  renderDiagnosisSuggestions();
+}
+
+function setMode(mode){
+  state.mode=mode;
+  document.querySelectorAll('[data-mode]').forEach(button=>{
+    const active=button.dataset.mode===mode;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+  $('.symptom-panel').hidden=mode!=='symptoms';
+  $('.diagnosis-panel').hidden=mode!=='diagnosis';
+  $('#protocolResult').hidden=true;
+  (mode==='symptoms'?$('#symptomSearch'):$('#diagnosisSearch')).focus();
 }
 
 function analyzeSymptoms(selected){
@@ -82,8 +113,11 @@ function buildProtocol(scores,acutePain,pointLimit){
 }
 
 function calculate(){
-  if(!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
-  state.scores=analyzeSymptoms(state.selected);
+  if(state.mode==='symptoms'&&!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
+  if(state.mode==='diagnosis'&&!state.diagnosis){alert('Выберите диагноз.');return}
+  state.scores=state.mode==='diagnosis'
+    ?Object.entries(state.engine.diagnoses[state.diagnosis]||{}).sort((a,b)=>b[1]-a[1])
+    :analyzeSymptoms(state.selected);
   const value=$('#pointLimit').value;
   const limit=value==='all'?null:Number(value);
   state.protocol=buildProtocol(state.scores,$('#acutePain').checked,limit);
@@ -92,7 +126,8 @@ function calculate(){
 
 function renderProtocol(){
   const top=state.scores.slice(0,3);
-  $('#prioritySummary').innerHTML=`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
+  const source=state.mode==='diagnosis'?`<div><span>Диагноз</span><b>${escapeHtml(state.diagnosis)}</b></div>`:`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>`;
+  $('#prioritySummary').innerHTML=`${source}${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
     return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div><div class="point-image placeholder">Схема из открытого источника готовится</div><div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
   }).join('')||'<div class="empty">Для выбранных данных точки не сформированы.</div>';
@@ -108,7 +143,8 @@ function showPoint(index){
 
 function reportText(){
   const priorities=state.scores.slice(0,5).map(([code,score])=>`${state.engine.meridians[code]?.name||code}: ${score}`).join(', ');
-  return `ЧЕРНОВИК ПРОТОКОЛА ТКМ\n\nСправочно-расчётный результат. Требует проверки квалифицированным специалистом.\n\nЖалобы: ${state.selected.join(', ')}\nПриоритетные меридианы: ${priorities}\n\n${state.protocol.map((p,i)=>`${i+1}. ${p.code}${p.name?` (${p.name})`:''}\nМеридиан: ${p.meridianName}\nДействие: ${p.action}\nПравило: ${p.rule}\nТип: ${p.pointType}\nОписание: ${p.pointDescription}`).join('\n\n')}`;
+  const source=state.mode==='diagnosis'?`Диагноз: ${state.diagnosis}`:`Жалобы: ${state.selected.join(', ')}`;
+  return `ЧЕРНОВИК ПРОТОКОЛА ТКМ\n\nСправочно-расчётный результат. Требует проверки квалифицированным специалистом.\n\n${source}\nПриоритетные меридианы: ${priorities}\n\n${state.protocol.map((p,i)=>`${i+1}. ${p.code}${p.name?` (${p.name})`:''}\nМеридиан: ${p.meridianName}\nДействие: ${p.action}\nПравило: ${p.rule}\nТип: ${p.pointType}\nОписание: ${p.pointDescription}`).join('\n\n')}`;
 }
 function download(name,type,content){const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
 function exportProtocol(kind){
@@ -120,12 +156,17 @@ function exportProtocol(kind){
   $('#exportDialog').close();
 }
 
-$('#symptomSearch').addEventListener('input',renderSuggestions);
+$('#symptomSearch').addEventListener('input',()=>scheduleSearch(renderSuggestions));
+$('#diagnosisSearch').addEventListener('input',()=>scheduleSearch(renderDiagnosisSuggestions));
 $('#clearSymptoms').addEventListener('click',()=>{state.selected=[];renderSelected();$('#protocolResult').hidden=true});
+$('#clearDiagnosis').addEventListener('click',()=>{state.diagnosis=null;renderSelectedDiagnosis();$('#protocolResult').hidden=true});
 $('#calculateProtocol').addEventListener('click',calculate);
 document.addEventListener('click',event=>{
+  const mode=event.target.closest('[data-mode]');if(mode)setMode(mode.dataset.mode);
   const add=event.target.closest('[data-add-symptom]');if(add&&!state.selected.includes(add.dataset.addSymptom)){state.selected.push(add.dataset.addSymptom);$('#symptomSearch').value='';renderSelected()}
   const remove=event.target.closest('[data-remove-symptom]');if(remove){state.selected=state.selected.filter(item=>item!==remove.dataset.removeSymptom);renderSelected()}
+  const diagnosis=event.target.closest('[data-select-diagnosis]');if(diagnosis){state.diagnosis=diagnosis.dataset.selectDiagnosis;$('#diagnosisSearch').value='';renderSelectedDiagnosis()}
+  if(event.target.closest('[data-clear-diagnosis]')){state.diagnosis=null;renderSelectedDiagnosis()}
   const detail=event.target.closest('[data-point-detail]');if(detail)showPoint(Number(detail.dataset.pointDetail));
   if(event.target.closest('[data-open-export]'))$('#exportDialog').showModal();
   if(event.target.closest('[data-close-dialog]'))event.target.closest('dialog').close();
@@ -136,7 +177,6 @@ document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('cli
 const metricKey='tkm_web_visits';const visits=Number(localStorage.getItem(metricKey)||0)+1;localStorage.setItem(metricKey,String(visits));$('#localVisits').textContent=visits;
 const started=Date.now();setInterval(()=>{const seconds=Math.floor((Date.now()-started)/1000);$('#sessionTime').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`},1000);
 
-fetch('assets/tkm-engine-data.json')
-  .then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})
-  .then(engine=>{state.engine=engine;renderSelected()})
+Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url=>fetch(url).then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})))
+  .then(([engine,diagnoses])=>{state.engine={...engine,diagnoses};state.symptomIndex=buildSearchIndex(engine.symptoms);state.diagnosisIndex=buildSearchIndex(diagnoses);renderSelected();renderSelectedDiagnosis()})
   .catch(()=>{$('#symptomSuggestions').innerHTML='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';$('#calculateProtocol').disabled=true});
