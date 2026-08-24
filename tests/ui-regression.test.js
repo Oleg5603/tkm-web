@@ -13,6 +13,11 @@ assert.equal(Object.keys(diagnoses).length, 63);
 assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
 assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
 assert.match(app, /setTimeout\(render,80\)/);
+assert.match(app, /const pointAtlas=/);
+assert.match(app, /assets\/point-atlas/);
+
+const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
+for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.jpg`), `Нет фотографии ${name}.jpg`);
 
 const normalize = value => String(value ?? '').toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').replace(/[-–—.]/g, ' ').replace(/\s+/g, ' ').trim();
 const started = performance.now();

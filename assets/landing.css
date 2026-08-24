@@ -295,7 +295,11 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  background: #f2eee4;
 }
+
+.point-image:hover img { transform: scale(1.025); }
+.point-image img { transition: transform .2s ease; }
 
 .point-image.placeholder {
   display: grid;
