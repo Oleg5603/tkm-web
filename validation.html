@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Проверка расчёта ТКМ — для специалиста</title>
   <link rel="stylesheet" href="assets/landing.css">
+  <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
   <style>
     body{background:#f4f2ec;color:#17231f}.validation{max-width:1120px;margin:auto;padding:32px 20px 70px}
     .validation header{margin-bottom:28px}.validation h1{font-size:clamp(2rem,5vw,4rem);line-height:1;margin:.3em 0}
@@ -20,7 +21,7 @@
     .review-summary{background:#e9f2ee;border-radius:18px;padding:18px;margin:24px 0}.review-summary p{margin:.35em 0}.review-summary button{border:0;border-radius:999px;background:#183c32;color:#fff;padding:11px 16px;cursor:pointer}.review-summary button:disabled{opacity:.5;cursor:not-allowed}.review-summary .reset-review{background:transparent;color:#183c32;border:1px solid #183c32;margin-left:8px}
   </style>
 </head>
-<body><main class="validation">
+<body><a class="skip-link" href="#mainContent">Перейти к содержанию</a><main id="mainContent" class="validation">
   <header><p class="tag">Экспертная приёмка · версия 25.08.2026</p><h1>Проверьте логику подбора</h1><p>Десять одиночных жалоб рассчитаны тем же алгоритмом, что и основная веб-версия. Лимит — 7 точек, признак острой боли выключен.</p></header>
   <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До вашего подтверждения результат обозначен как черновик.</div>
   <section class="review-summary" aria-live="polite"><strong>Ход проверки</strong><p id="reviewProgress">Проверено: 0 из 10</p><p>Ответы сохраняются только в этом браузере.</p><button id="exportReview" type="button" disabled>Скачать замечания</button><button id="resetReview" class="reset-review" type="button">Очистить ответы</button></section>
