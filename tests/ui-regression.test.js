@@ -3,6 +3,7 @@ const fs = require('node:fs');
 
 const html = fs.readFileSync('index.html', 'utf8');
 const validation = fs.readFileSync('validation.html', 'utf8');
+const topics = fs.readFileSync('topics.html', 'utf8');
 const app = fs.readFileSync('assets/app.js', 'utf8');
 const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
 const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
@@ -11,6 +12,10 @@ assert.match(html, /data-mode="diagnosis"/);
 assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
 assert.match(html, /id="diagnosisSearch"/);
 assert.match(html, /href="validation\.html">Экспертная проверка/);
+assert.match(html, /href="topics\.html">Материалы/);
+for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(topics, new RegExp(`id="${id}"`));
+assert.match(topics, /Система Татьяны Малаховой/);
+assert.match(topics, /150–300 минут/);
 assert.equal(Object.keys(diagnoses).length, 63);
 assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
 assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
