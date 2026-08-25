@@ -19,6 +19,7 @@ for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(
 for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(topics, new RegExp(`id="${id}"`));
 assert.match(topics, /Система Татьяны Малаховой/);
 assert.match(topics, /150–300 минут/);
+for (const method of ['Акупрессура','Электропунктура по методу Леднёва','Шарики, семена','Лазерное воздействие','Воздействие полынной сигарой']) assert.match(topics, new RegExp(method));
 for (const page of [html, validation, topics]) {
   assert.match(page, /class="skip-link" href="#mainContent"/);
   assert.match(page, /id="mainContent"/);
