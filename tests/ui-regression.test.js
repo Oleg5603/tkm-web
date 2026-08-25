@@ -10,6 +10,7 @@ const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8
 assert.match(html, /data-mode="diagnosis"/);
 assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
 assert.match(html, /id="diagnosisSearch"/);
+assert.match(html, /href="validation\.html">Экспертная проверка/);
 assert.equal(Object.keys(diagnoses).length, 63);
 assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
 assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
