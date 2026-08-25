@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
 const html = fs.readFileSync('index.html', 'utf8');
+const validation = fs.readFileSync('validation.html', 'utf8');
 const app = fs.readFileSync('assets/app.js', 'utf8');
 const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
 const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
@@ -15,6 +16,13 @@ assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
 assert.match(app, /setTimeout\(render,80\)/);
 assert.match(app, /const pointAtlas=/);
 assert.match(app, /assets\/point-atlas/);
+assert.match(validation, /id="reviewProgress"/);
+assert.match(validation, /id="exportReview"/);
+assert.match(validation, /id="resetReview"/);
+assert.match(validation, /tkm-expert-review-v1/);
+assert.match(validation, /localStorage\.removeItem\(storageKey\)/);
+assert.match(validation, /href="index\.html#picker"/);
+assert.doesNotMatch(validation, /href="index\.html#calculator"/);
 
 const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
 for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.jpg`), `Нет фотографии ${name}.jpg`);

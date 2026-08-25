@@ -14,13 +14,18 @@
     .score{color:#49645b;margin:0 0 15px}.points{margin:0;padding-left:22px}.points li{margin:8px 0}.tag{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#806b2a}
     .actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}.actions a{display:inline-block;padding:12px 18px;border-radius:999px;background:#183c32;color:white;text-decoration:none}
     .actions a.secondary{background:white;color:#183c32;border:1px solid #183c32}
+    .review{border-top:1px solid #dfe5e1;margin-top:18px;padding-top:16px}.review legend{font-weight:700;margin-bottom:10px}.review-options{display:flex;gap:8px;flex-wrap:wrap}
+    .review-options label{border:1px solid #b9c8c1;border-radius:999px;cursor:pointer;padding:8px 12px}.review-options label:has(input:checked){background:#183c32;color:#fff;border-color:#183c32}.review-options input{margin-right:6px}
+    .review textarea{box-sizing:border-box;width:100%;min-height:76px;margin-top:12px;border:1px solid #b9c8c1;border-radius:12px;padding:10px;font:inherit}
+    .review-summary{background:#e9f2ee;border-radius:18px;padding:18px;margin:24px 0}.review-summary p{margin:.35em 0}.review-summary button{border:0;border-radius:999px;background:#183c32;color:#fff;padding:11px 16px;cursor:pointer}.review-summary button:disabled{opacity:.5;cursor:not-allowed}.review-summary .reset-review{background:transparent;color:#183c32;border:1px solid #183c32;margin-left:8px}
   </style>
 </head>
 <body><main class="validation">
-  <header><p class="tag">Экспертная приёмка · версия 19.08.2026</p><h1>Проверьте логику подбора</h1><p>Десять одиночных жалоб рассчитаны тем же алгоритмом, что и основная веб-версия. Лимит — 7 точек, признак острой боли выключен.</p></header>
+  <header><p class="tag">Экспертная приёмка · версия 25.08.2026</p><h1>Проверьте логику подбора</h1><p>Десять одиночных жалоб рассчитаны тем же алгоритмом, что и основная веб-версия. Лимит — 7 точек, признак острой боли выключен.</p></header>
   <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До вашего подтверждения результат обозначен как черновик.</div>
+  <section class="review-summary" aria-live="polite"><strong>Ход проверки</strong><p id="reviewProgress">Проверено: 0 из 10</p><p>Ответы сохраняются только в этом браузере.</p><button id="exportReview" type="button" disabled>Скачать замечания</button><button id="resetReview" class="reset-review" type="button">Очистить ответы</button></section>
   <section class="cases" id="cases"></section>
-  <div class="actions"><a href="index.html#calculator">Открыть калькулятор</a><a class="secondary" href="mailto:?subject=Проверка%20алгоритма%20ТКМ">Отправить замечания</a></div>
+  <div class="actions"><a href="index.html#picker">Открыть калькулятор</a></div>
 </main>
 <script>
 const cases=[
@@ -35,5 +40,58 @@ const cases=[
 ['Кашель сухой','Лёгкие 3 · Почки 2',['P9 — тонизация','E41 — тонизация «матери»','C7 — седация контролирующего элемента','R7 — тонизация']],
 ['Головокружение','Желчный пузырь 2 · Печень 2 · Почки 1',['VB43 — тонизация','V67 — тонизация «матери»','P5 — седация контролирующего элемента','F8 — тонизация','R7 — тонизация','P9 — тонизация «матери»']]
 ];
-document.querySelector('#cases').innerHTML=cases.map(([name,scores,points],i)=>`<article class="case"><p class="tag">Кейс ${i+1}</p><h2>${name}</h2><p class="score">${scores}</p><ol class="points">${points.map(x=>`<li>${x}</li>`).join('')}</ol></article>`).join('');
+const storageKey='tkm-expert-review-v1';
+let reviews={};
+try{reviews=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{reviews={}}
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+document.querySelector('#cases').innerHTML=cases.map(([name,scores,points],i)=>{
+  const review=reviews[i]||{};
+  return `<article class="case"><p class="tag">Кейс ${i+1}</p><h2>${name}</h2><p class="score">${scores}</p><ol class="points">${points.map(x=>`<li>${x}</li>`).join('')}</ol><fieldset class="review"><legend>Оценка специалиста</legend><div class="review-options"><label><input type="radio" name="verdict-${i}" value="correct" ${review.verdict==='correct'?'checked':''}>Верно</label><label><input type="radio" name="verdict-${i}" value="revise" ${review.verdict==='revise'?'checked':''}>Нужно исправить</label></div><textarea data-note="${i}" placeholder="Что изменить в подборе или объяснении?">${escapeHtml(review.note)}</textarea></fieldset></article>`;
+}).join('');
+
+function saveReviews(){
+  localStorage.setItem(storageKey,JSON.stringify(reviews));
+  const checked=Object.values(reviews).filter(item=>item.verdict).length;
+  document.querySelector('#reviewProgress').textContent=`Проверено: ${checked} из ${cases.length}`;
+  document.querySelector('#exportReview').disabled=checked===0;
+}
+
+document.querySelector('#cases').addEventListener('change',event=>{
+  const verdict=event.target.closest('input[type="radio"]');
+  if(!verdict)return;
+  const index=Number(verdict.name.split('-')[1]);
+  reviews[index]={...reviews[index],verdict:verdict.value};
+  saveReviews();
+});
+
+document.querySelector('#cases').addEventListener('input',event=>{
+  if(!event.target.matches('[data-note]'))return;
+  const index=Number(event.target.dataset.note);
+  reviews[index]={...reviews[index],note:event.target.value};
+  saveReviews();
+});
+
+document.querySelector('#exportReview').addEventListener('click',()=>{
+  const lines=['Экспертная проверка алгоритма ТКМ',new Date().toLocaleString('ru-RU'),''];
+  cases.forEach(([name,scores,points],index)=>{
+    const review=reviews[index]||{};
+    lines.push(`${index+1}. ${name}`,`Оценка: ${review.verdict==='correct'?'верно':review.verdict==='revise'?'нужно исправить':'не проверено'}`,`Веса: ${scores}`,`Точки: ${points.join('; ')}`,`Комментарий: ${review.note||'—'}`,'');
+  });
+  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+  const link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);link.download='tkm-expert-review.txt';link.click();
+  setTimeout(()=>URL.revokeObjectURL(link.href),0);
+});
+
+document.querySelector('#resetReview').addEventListener('click',()=>{
+  if(!confirm('Очистить все оценки и комментарии?'))return;
+  reviews={};
+  localStorage.removeItem(storageKey);
+  document.querySelectorAll('.review input').forEach(input=>{input.checked=false});
+  document.querySelectorAll('.review textarea').forEach(textarea=>{textarea.value=''});
+  saveReviews();
+});
+
+saveReviews();
 </script></body></html>
