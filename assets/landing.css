@@ -350,8 +350,15 @@
   background: #f2eee4;
 }
 
+.point-image img.rotate-90 { rotate: 90deg; scale: .62; }
+.point-image img.rotate-180 { rotate: 180deg; }
+
 .point-image:hover img { transform: scale(1.025); }
 .point-image img { transition: transform .2s ease; }
+
+.detail-image-frame { display: grid; overflow: hidden; place-items: center; min-height: 360px; border-radius: 15px; background: #edf0ec; }
+.detail-image-frame .detail-image.rotate-90 { rotate: 90deg; scale: .68; }
+.detail-image-frame .detail-image.rotate-180 { rotate: 180deg; }
 
 .point-image.placeholder {
   display: grid;

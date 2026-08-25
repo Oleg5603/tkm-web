@@ -102,22 +102,26 @@ function parsePoint(value){
 
 const pointAtlas={
   C6:'arm-inner',C7:'arm-inner',C9:'hand-back',
-  E34:'leg-front',E41:'foot-top',E45:'foot-top',
-  F2:'foot-top',F6:'leg-inner',F8:'leg-inner',
-  GI11:'hand-back',GI2:'hand-back',GI7:'arm-outer',
+  E41:'foot-top',E45:'foot-top',
+  F2:'foot-top',F8:'leg-inner',
+  GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
   P5:'arm-inner',P6:'arm-inner',P9:'arm-inner',
-  R1:'foot-top',R5:'leg-inner',R7:'leg-inner',
-  RP2:'foot-top',RP5:'leg-front',RP8:'leg-inner',
-  TR10:'knee-side',TR3:'hand-back',TR7:'arm-outer',
+  RP8:'leg-inner',
+  TR3:'hand-back',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
-  VB36:'leg-front',VB38:'leg-front',VB43:'foot-top'
+  VB36:'leg-front',VB43:'foot-top'
 };
 
-function atlasImage(code){
+const atlasRotation={
+  'arm-inner':'rotate-90','foot-side':'rotate-180','foot-top':'rotate-90',
+  'knee-side':'rotate-90','leg-front':'rotate-90'
+};
+
+function atlasPhoto(code){
   const image=pointAtlas[code];
-  return image?`assets/point-atlas/${image}.jpg`:null;
+  return image?{src:`assets/point-atlas/${image}.jpg`,orientation:atlasRotation[image]||''}:null;
 }
 
 function buildProtocol(scores,acutePain,pointLimit){
@@ -175,8 +179,8 @@ function renderProtocol(){
   const source=state.mode==='diagnosis'?`<div><span>Диагноз</span><b>${escapeHtml(state.diagnosis)}</b></div>`:`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>`;
   $('#prioritySummary').innerHTML=`${source}${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
-    const image=atlasImage(point.code);
-    const visual=image?`<button type="button" class="point-image" data-point-detail="${index}" aria-label="Открыть схему точки ${escapeHtml(point.code)}"><img src="${image}" alt="Локализация точки ${escapeHtml(point.code)}" loading="lazy"></button>`:'<div class="point-image placeholder">Фотография локализации пока не найдена</div>';
+    const photo=atlasPhoto(point.code);
+    const visual=photo?`<button type="button" class="point-image" data-point-detail="${index}" aria-label="Открыть схему точки ${escapeHtml(point.code)}"><img class="${photo.orientation}" src="${photo.src}" alt="Схема с обозначением точки ${escapeHtml(point.code)}" loading="lazy"></button>`:'<div class="point-image placeholder">Проверенная схема именно этой точки пока не добавлена</div>';
     return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div>${visual}<div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
   }).join('')||'<div class="empty">Для выбранных данных точки не сформированы.</div>';
   $('#protocolResult').hidden=false;
@@ -185,8 +189,8 @@ function renderProtocol(){
 
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
-  const image=atlasImage(point.code);
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${image?`<img class="detail-image" src="${image}" alt="Локализация точки ${escapeHtml(point.code)}">`:''}<p class="source-note">Фото из личного учебного архива пользователя. Используйте как ориентир; точную локализацию проверяет специалист.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  const photo=atlasPhoto(point.code);
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема с обозначением точки ${escapeHtml(point.code)}"></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. На схеме присутствует обозначение выбранной точки; точную локализацию проверяет специалист.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
