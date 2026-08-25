@@ -13,6 +13,8 @@ assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
 assert.match(html, /id="diagnosisSearch"/);
 assert.match(html, /href="validation\.html">Экспертная проверка/);
 assert.match(html, /href="topics\.html">Материалы/);
+assert.match(html, /class="topic-preview wrap"/);
+for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(html, new RegExp(`href="topics\\.html#${id}"`));
 for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(topics, new RegExp(`id="${id}"`));
 assert.match(topics, /Система Татьяны Малаховой/);
 assert.match(topics, /150–300 минут/);
