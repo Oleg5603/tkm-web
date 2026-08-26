@@ -20,6 +20,10 @@ assert.match(html, /class="topic-preview wrap"/);
 for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(html, new RegExp(`href="topics\\.html#${id}"`));
 for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(topics, new RegExp(`id="${id}"`));
 assert.match(topics, /Система Татьяны Малаховой/);
+assert.match(topics, /Личный выбор автора/);
+assert.match(topics, /clck\.ru\/3LBSQJ/);
+assert.match(topics, /Соберите пример дневного рациона/);
+assert.match(topics, /Три занятия в неделю/);
 assert.match(topics, /150–300 минут/);
 for (const method of ['Акупрессура','Электропунктура по методу Леднёва','Шарики, семена','Лазерное воздействие','Воздействие полынной сигарой']) assert.match(topics, new RegExp(method));
 for (const page of [html, validation, topics]) {
