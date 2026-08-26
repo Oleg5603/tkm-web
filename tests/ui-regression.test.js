@@ -33,12 +33,16 @@ assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
 assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
 assert.match(app, /setTimeout\(render,80\)/);
 assert.match(app, /const pointAtlas=/);
-assert.match(app, /assets\/point-atlas/);
+assert.match(app, /assets\/point-atlas\/\$\{image\}\.png/);
 assert.match(css, /\.point-image img[\s\S]*object-fit:\s*cover/);
 assert.doesNotMatch(css, /\.point-image img\.rotate-90\s*\{[^}]*scale:\s*\.62/);
+assert.match(css, /\.point-visual,\s*\.point-image\s*\{[^}]*overflow:\s*hidden/);
+assert.match(css, /\.point-focus-label\s*\{[^}]*background:\s*#b7352d/);
+assert.match(app, /class="point-focus-label"/);
 assert.match(app, /const atlasRotation=/);
 assert.match(app, /GI11:'arm-outer'/);
-for (const unsupported of ['E34','F6','R1','R5','R7','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
+assert.match(app, /VB38:'leg-front'/);
+for (const unsupported of ['E34','F6','R1','R5','R7','RP2','RP5','TR10','TR7']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="exportReview"/);
 assert.match(validation, /id="resetReview"/);
@@ -48,7 +52,7 @@ assert.match(validation, /href="index\.html#picker"/);
 assert.doesNotMatch(validation, /href="index\.html#calculator"/);
 
 const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
-for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.jpg`), `Нет фотографии ${name}.jpg`);
+for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.png`), `Нет обработанной фотографии ${name}.png`);
 
 const normalize = value => String(value ?? '').toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').replace(/[-–—.]/g, ' ').replace(/\s+/g, ' ').trim();
 const started = performance.now();

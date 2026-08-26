@@ -111,7 +111,7 @@ const pointAtlas={
   RP8:'leg-inner',
   TR3:'hand-back',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
-  VB36:'leg-front',VB43:'foot-top'
+  VB36:'leg-front',VB38:'leg-front',VB43:'foot-top'
 };
 
 const atlasRotation={
@@ -121,7 +121,7 @@ const atlasRotation={
 
 function atlasPhoto(code){
   const image=pointAtlas[code];
-  return image?{src:`assets/point-atlas/${image}.jpg`,orientation:atlasRotation[image]||''}:null;
+  return image?{src:`assets/point-atlas/${image}.png`,orientation:atlasRotation[image]||''}:null;
 }
 
 function buildProtocol(scores,acutePain,pointLimit){
@@ -180,7 +180,7 @@ function renderProtocol(){
   $('#prioritySummary').innerHTML=`${source}${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
     const photo=atlasPhoto(point.code);
-    const visual=photo?`<button type="button" class="point-image" data-point-detail="${index}" aria-label="Открыть схему точки ${escapeHtml(point.code)}"><img class="${photo.orientation}" src="${photo.src}" alt="Схема с обозначением точки ${escapeHtml(point.code)}" loading="lazy"></button>`:'<div class="point-image placeholder">Проверенная схема именно этой точки пока не добавлена</div>';
+    const visual=photo?`<button type="button" class="point-image" data-point-detail="${index}" aria-label="Открыть схему точки ${escapeHtml(point.code)}"><img class="${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}" loading="lazy"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></button>`:'<div class="point-image placeholder">Проверенная схема именно этой точки пока не добавлена</div>';
     return `<article class="protocol-card"><div class="protocol-number">${String(index+1).padStart(2,'0')}</div>${visual}<div class="protocol-body"><span>${escapeHtml(point.meridianName)} · балл ${point.score}</span><h3>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h3><p class="action ${point.action}">${escapeHtml(point.action)}</p><p>${escapeHtml(point.rule)}</p><button type="button" data-point-detail="${index}">Почему выбрана →</button></div></article>`;
   }).join('')||'<div class="empty">Для выбранных данных точки не сформированы.</div>';
   $('#protocolResult').hidden=false;
@@ -190,7 +190,7 @@ function renderProtocol(){
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
   const photo=atlasPhoto(point.code);
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема с обозначением точки ${escapeHtml(point.code)}"></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. На схеме присутствует обозначение выбранной точки; точную локализацию проверяет специалист.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и наличие этого обозначения на исходной схеме проверяет специалист.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
