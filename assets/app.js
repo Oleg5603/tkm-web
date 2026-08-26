@@ -2,27 +2,15 @@ const state={engine:null,mode:'symptoms',selected:[],diagnoses:[],protocol:[],sc
 const $=selector=>document.querySelector(selector);
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const normalize=value=>String(value??'').toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[-–—.]/g,' ').replace(/\s+/g,' ').trim();
-const trialKey='tkm_trial_profile_v1';
-const trialDuration=10*24*60*60*1000;
+const reviewMode=new URLSearchParams(location.search).get('review')==='1';
 
-function getTrial(){try{return JSON.parse(localStorage.getItem(trialKey)||'null')}catch{return null}}
-function trialActive(profile=getTrial()){return Boolean(profile?.expiresAt&&Date.now()<profile.expiresAt)}
-function updateTrialUi(){
-  const profile=getTrial(),chip=$('#trialChip');
-  if(!profile){chip.hidden=true;return}
-  const days=Math.max(0,Math.ceil((profile.expiresAt-Date.now())/86400000));
-  chip.hidden=false;chip.classList.toggle('expired',days===0);
-  chip.textContent=days?`Демо: осталось ${days} дн.`:'Демодоступ завершён';
-  $('#paymentName').value=profile.name||'';$('#paymentEmail').value=profile.email||'';$('#paymentPhone').value=profile.phone||'';
-}
-function requireTrial(){
-  if(trialActive())return true;
-  const expired=Boolean(getTrial());
-  $('#accessLead').textContent=expired?'10-дневный демодоступ завершён. Для продолжения потребуется оплата после подключения Robokassa.':'Регистрация займёт меньше минуты. Данные сохраняются только на этом устройстве и пока не отправляются на сервер.';
-  $('#accessForm').querySelectorAll('input,button').forEach(control=>control.disabled=expired);
-  $('#accessStatus').textContent=expired?'Форма оплаты подготовлена ниже; приём платежей пока выключен.':'';
-  if(!$('#accessDialog').open)$('#accessDialog').showModal();
-  return false;
+function requireSafeContext(){
+  if(!state.engine){alert('Расчётные данные ещё не загружены.');return false}
+  if($('#redFlags').checked||TkmProtocolUtils.hasUrgent([...state.selected,...state.diagnoses])){
+    alert('При тревожных или острых симптомах расчёт точек не выполняется. Обратитесь за медицинской помощью; при угрозе жизни вызовите экстренную службу.');return false;
+  }
+  if(!reviewMode){alert('Публичный расчёт закрыт до завершения экспертной проверки алгоритма.');return false}
+  return true;
 }
 function pointVisual(point){
   const code=escapeHtml(point.code);
@@ -122,7 +110,7 @@ const atlasRotation={
 
 function atlasPhoto(code){
   const image=pointAtlas[code];
-  return image?{src:`assets/point-atlas/${image}.png`,orientation:atlasRotation[image]||''}:null;
+  return image?{src:`assets/point-atlas/${image}.webp`,orientation:atlasRotation[image]||''}:null;
 }
 
 function analyzeDiagnoses(selected){
@@ -133,7 +121,7 @@ function analyzeDiagnoses(selected){
 
 function buildProtocol(scores,acutePain,pointLimit){
   if(!scores.length)return [];
-  const points=[],seen=new Set();
+  const points=[],seen=new Set();let protectedIndex=-1;
   const add=(meridian,rawPoint,action,rule,score)=>{
     const point=parsePoint(rawPoint);if(!point.code||seen.has(point.code))return;
     seen.add(point.code);
@@ -163,13 +151,17 @@ function buildProtocol(scores,acutePain,pointLimit){
   });
   if(acutePain&&ranked.length){
     const [code,score]=ranked[0],xi=state.engine.xi_points[code];
-    if(xi)add(code,xi,'обезболивание',`Xi-точка: острая боль / спазм — ${state.engine.meridians[code].name}`,score);
+    if(xi){
+      const before=points.length;
+      add(code,xi,'требует проверки','Xi-точка: применяется только после медицинской оценки причины острой боли',score);
+      if(points.length>before)protectedIndex=points.length-1;
+    }
   }
-  return pointLimit==null?points:points.slice(0,pointLimit===0?5:pointLimit);
+  return TkmProtocolUtils.limitPoints(points,pointLimit,protectedIndex);
 }
 
 function calculate(){
-  if(!requireTrial())return;
+  if(!requireSafeContext())return;
   if(state.mode==='symptoms'&&!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
   if(state.mode==='diagnosis'&&!state.diagnoses.length){alert('Выберите хотя бы один диагноз.');return}
   state.scores=state.mode==='diagnosis'
@@ -177,7 +169,7 @@ function calculate(){
     :analyzeSymptoms(state.selected);
   const value=$('#pointLimit').value;
   const limit=value==='all'?null:Number(value);
-  state.protocol=buildProtocol(state.scores,$('#acutePain').checked,limit);
+  state.protocol=buildProtocol(state.scores,false,limit);
   renderProtocol();
 }
 
@@ -233,24 +225,16 @@ document.addEventListener('click',event=>{
   const exportButton=event.target.closest('[data-export]');if(exportButton)exportProtocol(exportButton.dataset.export);
 });
 document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog&&!dialog.hasAttribute('data-static-dialog'))dialog.close()}));
-$('#accessDialog').addEventListener('cancel',event=>event.preventDefault());
-$('#accessForm').addEventListener('submit',event=>{
-  event.preventDefault();
-  if(getTrial())return;
-  const startedAt=Date.now();
-  const profile={name:$('#accessName').value.trim(),email:$('#accessEmail').value.trim(),phone:$('#accessPhone').value.trim(),startedAt,expiresAt:startedAt+trialDuration};
-  localStorage.setItem(trialKey,JSON.stringify(profile));
-  $('#accessStatus').textContent='Доступ открыт на 10 дней.';updateTrialUi();
-  setTimeout(()=>$('#accessDialog').close(),500);
-});
-$('#paymentForm').addEventListener('submit',event=>event.preventDefault());
-
-const metricKey='tkm_web_visits';const visits=Number(localStorage.getItem(metricKey)||0)+1;localStorage.setItem(metricKey,String(visits));$('#localVisits').textContent=visits;
 const started=Date.now();setInterval(()=>{const seconds=Math.floor((Date.now()-started)/1000);$('#sessionTime').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`},1000);
 
-updateTrialUi();
-if(!trialActive())setTimeout(requireTrial,250);
-
 Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url=>fetch(url).then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})))
-  .then(([engine,diagnoses])=>{state.engine={...engine,diagnoses};state.symptomIndex=buildSearchIndex(engine.symptoms);state.diagnosisIndex=buildSearchIndex(diagnoses);renderSelected();renderSelectedDiagnosis()})
-  .catch(()=>{$('#symptomSuggestions').innerHTML='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';$('#calculateProtocol').disabled=true});
+  .then(([engine,diagnoses])=>{
+    state.engine={...engine,diagnoses};state.symptomIndex=buildSearchIndex(engine.symptoms);state.diagnosisIndex=buildSearchIndex(diagnoses);renderSelected();renderSelectedDiagnosis();
+    $('#calculateProtocol').disabled=!reviewMode;
+    $('#calculateProtocol').textContent=reviewMode?'Сформировать экспертный черновик':'Расчёт ожидает экспертной проверки';
+    $('#engineStatus').textContent=reviewMode?'Экспертный режим: результат остаётся непроверенным черновиком и не является назначением.':'Публичный расчёт временно закрыт до завершения экспертной проверки.';
+  })
+  .catch(()=>{
+    const message='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';
+    $('#symptomSuggestions').innerHTML=message;$('#diagnosisSuggestions').innerHTML=message;$('#engineStatus').textContent='Ошибка загрузки данных.';$('#calculateProtocol').disabled=true;
+  });

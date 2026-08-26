@@ -424,6 +424,7 @@
 .payment-form input, .payment-form select, .access-form input { min-height: 46px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; font: inherit; }
 .payment-form button[disabled] { opacity: .58; cursor: not-allowed; }
 .payment-form > p { margin: 0; color: var(--muted); font-size: .75rem; }
+.landing-page main{display:flex;flex-direction:column}.landing-page .hero{order:1}.landing-page .picker-section{order:2}.landing-page .benefits{order:3}.landing-page .intro{order:4}.landing-page .topic-preview{order:5}.landing-page .payment-section{order:6}.landing-page .about{order:7}.landing-page .safety{order:8}.danger-check{border-color:#c36f63;background:#fff4f1}.danger-check input{min-width:24px;min-height:24px}.protocol-settings .danger-check{min-height:72px}.calculate:disabled{cursor:not-allowed;opacity:.58}.metrics a{color:#dcebe5}.payment-form>a{justify-self:start}
 .access-dialog { width: min(520px, calc(100% - 28px)); }
 .access-form { margin-top: 20px; }
 .access-form .consent { grid-template-columns: auto 1fr; align-items: start; font-weight: 500; line-height: 1.45; }

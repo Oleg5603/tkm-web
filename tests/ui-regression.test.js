@@ -10,6 +10,8 @@ const app = fs.readFileSync('assets/app.js', 'utf8');
 const nutrition = fs.readFileSync('assets/nutrition-calculator.js', 'utf8');
 const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
 const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
+const privacy = fs.readFileSync('privacy.html', 'utf8');
+const terms = fs.readFileSync('terms.html', 'utf8');
 
 assert.match(html, /data-mode="diagnosis"/);
 assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
@@ -37,6 +39,8 @@ for (const page of [html, validation, topics]) {
   assert.match(page, /id="mainContent"/);
   assert.match(page, /assets\/accessibility\.css/);
 }
+assert.match(privacy, /Конфиденциальность/);
+assert.match(terms, /Условия использования/);
 assert.match(accessibility, /prefers-reduced-motion: reduce/);
 assert.match(accessibility, /:focus-visible/);
 assert.equal(Object.keys(diagnoses).length, 63);
@@ -47,7 +51,7 @@ assert.match(app, /function analyzeDiagnoses\(selected\)/);
 assert.match(app, /data-remove-diagnosis/);
 assert.match(app, /setTimeout\(render,80\)/);
 assert.match(app, /const pointAtlas=/);
-assert.match(app, /assets\/point-atlas\/\$\{image\}\.png/);
+assert.match(app, /assets\/point-atlas\/\$\{image\}\.webp/);
 assert.match(css, /\.point-image img[\s\S]*object-fit:\s*cover/);
 assert.doesNotMatch(css, /\.point-image img\.rotate-90\s*\{[^}]*scale:\s*\.62/);
 assert.match(css, /\.point-visual,\s*\.point-image\s*\{[^}]*overflow:\s*hidden/);
@@ -62,11 +66,11 @@ assert.match(validation, /id="exportReview"/);
 assert.match(validation, /id="resetReview"/);
 assert.match(validation, /tkm-expert-review-v1/);
 assert.match(validation, /localStorage\.removeItem\(storageKey\)/);
-assert.match(validation, /href="index\.html#picker"/);
+assert.match(validation, /href="index\.html\?review=1#picker"/);
 assert.doesNotMatch(validation, /href="index\.html#calculator"/);
 
 const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
-for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.png`), `Нет обработанной фотографии ${name}.png`);
+for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.webp`), `Нет оптимизированной фотографии ${name}.webp`);
 
 const normalize = value => String(value ?? '').toLocaleLowerCase('ru-RU').replace(/ё/g, 'е').replace(/[-–—.]/g, ' ').replace(/\s+/g, ' ').trim();
 const started = performance.now();

@@ -6,11 +6,13 @@
   <title>ТКМ — подбор точек с объяснением</title>
   <meta name="description" content="Веб-приложение ТКМ помогает систематизировать жалобы, определить связанные меридианы и подготовить объяснимый предварительный протокол точек.">
   <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="assets/styles.css?v=20260825-1">
   <link rel="stylesheet" href="assets/landing.css?v=20260825-1">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
 </head>
-<body>
+<body class="landing-page">
   <a class="skip-link" href="#mainContent">Перейти к содержанию</a>
   <header class="site-header">
     <div class="wrap nav">
@@ -42,7 +44,7 @@
         <aside class="hero-visual" aria-label="Что вы получите">
           <div class="visual-top"><span class="pulse"></span><span>Пример результата</span></div>
           <div class="body-map" aria-hidden="true"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="body-line"></span></div>
-          <div class="result-preview"><b>Локализация точки</b><span>Проверенная схема из открытого источника</span></div>
+          <div class="result-preview"><b>Область меридиана</b><span>Учебная фотография; точную локализацию проверяет специалист</span></div>
         </aside>
       </div>
     </section>
@@ -112,9 +114,9 @@
           <aside class="protocol-settings">
             <h3>Настройки протокола</h3>
             <label><span>Количество точек</span><select id="pointLimit"><option value="5">5 точек</option><option value="7">7 точек</option><option value="9">9 точек</option><option value="all">Все релевантные</option></select></label>
-            <label class="acute-check"><input id="acutePain" type="checkbox"><span><b>Острая боль или спазм</b><small>Добавить Xi-точку ведущего меридиана</small></span></label>
-            <button id="calculateProtocol" class="button primary calculate" type="button">Сформировать протокол</button>
-            <p>Расчёт выполняется локально в браузере. Жалобы никуда не отправляются.</p>
+            <label class="acute-check danger-check"><input id="redFlags" type="checkbox"><span><b>Есть тревожные симптомы</b><small>Сильная или внезапная боль, кровотечение, боль в груди, одышка, слабость/онемение одной стороны, нарушение речи или сознания</small></span></label>
+            <button id="calculateProtocol" class="button primary calculate" type="button" disabled>Загрузка данных…</button>
+            <p id="engineStatus" role="status">Публичный расчёт временно закрыт до завершения экспертной проверки. Данные загружаются локально и никуда не отправляются.</p>
           </aside>
         </div>
 
@@ -126,19 +128,7 @@
       </div>
     </section>
 
-    <section class="payment-section" id="payment">
-      <div class="wrap payment-grid">
-        <div><p class="eyebrow dark">Продление доступа</p><h2>Продолжить работу после 10 бесплатных дней</h2><p>Регистрация открывает полный демодоступ на этом устройстве. Оплата через Robokassa появится после подключения защищённого платёжного кабинета.</p></div>
-        <form id="paymentForm" class="payment-form">
-          <label><span>Тариф</span><select id="paymentPlan"><option>Постоянный доступ</option><option>Продление доступа</option></select></label>
-          <label><span>Имя</span><input id="paymentName" autocomplete="name" required></label>
-          <label><span>Email</span><input id="paymentEmail" type="email" autocomplete="email" required></label>
-          <label><span>Телефон</span><input id="paymentPhone" type="tel" autocomplete="tel" required></label>
-          <button class="button primary" type="submit" disabled>Перейти к оплате — скоро</button>
-          <p>Данные карты здесь не вводятся. После подключения платёж откроется на защищённой странице Robokassa.</p>
-        </form>
-      </div>
-    </section>
+    <section class="payment-section" id="payment"><div class="wrap payment-grid"><div><p class="eyebrow dark">Подготовка запуска</p><h2>Подписка появится после экспертной проверки</h2><p>Сейчас сайт не собирает имя, email или телефон и не принимает оплату. Защищённая подписка будет подключена только вместе с серверной авторизацией, политикой конфиденциальности и платёжным кабинетом.</p></div><div class="payment-form"><strong>Что должно быть готово</strong><p>Экспертное подтверждение алгоритма, проверенные фотографии точек, серверный учёт доступа и безопасная оплата.</p><a class="button secondary" href="validation.html">Открыть экспертную проверку</a></div></div></section>
 
     <section class="about wrap">
       <div><p class="eyebrow dark">О приложении</p><h2>Помощник, а не самостоятельный врач</h2></div>
@@ -148,23 +138,11 @@
     <section class="safety wrap" role="note"><span>i</span><div><strong>Важно знать</strong><p>Не выполняйте иглоукалывание и другие инвазивные процедуры самостоятельно. При боли, ухудшении состояния или тревожных симптомах обратитесь к врачу. Фактический результат индивидуален и не гарантируется.</p></div></section>
   </main>
 
-  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="#top"><span>Т</span>ТКМ</a><p>Понятный помощник по подбору точек.</p></div><div class="metrics"><span>Открытий на устройстве: <b id="localVisits">—</b></span><span>Время знакомства: <b id="sessionTime">00:00</b></span><small>Данные остаются только на этом устройстве.</small></div></div></footer>
+  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="#top"><span>Т</span>ТКМ</a><p>Справочный помощник для экспертной проверки.</p></div><div class="metrics"><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a><span>Время знакомства: <b id="sessionTime">00:00</b></span></div></div></footer>
 
   <dialog id="detailDialog" class="dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><div id="dialogContent"></div></dialog>
   <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать черновик</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
-  <dialog id="accessDialog" class="dialog access-dialog" aria-labelledby="accessTitle" data-static-dialog>
-    <p class="eyebrow dark">Бесплатный доступ на 10 дней</p><h2 id="accessTitle">Представьтесь, чтобы открыть ТКМ</h2>
-    <p id="accessLead">Регистрация займёт меньше минуты. Данные сохраняются только на этом устройстве и пока не отправляются на сервер.</p>
-    <form id="accessForm" class="access-form">
-      <label><span>Имя</span><input id="accessName" name="name" autocomplete="name" required minlength="2"></label>
-      <label><span>Email</span><input id="accessEmail" name="email" type="email" autocomplete="email" required></label>
-      <label><span>Телефон</span><input id="accessPhone" name="phone" type="tel" autocomplete="tel" required minlength="7"></label>
-      <label class="consent"><input id="accessConsent" type="checkbox" required><span>Согласен на локальное сохранение этих данных и условия 10-дневного демодоступа.</span></label>
-      <button class="button primary" type="submit">Получить 10 дней бесплатно</button>
-      <p id="accessStatus" class="form-status" aria-live="polite"></p>
-    </form>
-  </dialog>
-  <div class="trial-chip" id="trialChip" hidden></div>
-  <script src="assets/app.js?v=20260825-1" defer></script>
+  <script src="assets/protocol-utils.js?v=20260826-1" defer></script>
+  <script src="assets/app.js?v=20260826-1" defer></script>
 </body>
 </html>

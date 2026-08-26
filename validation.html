@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Проверка расчёта ТКМ — для специалиста</title>
   <link rel="stylesheet" href="assets/landing.css">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
@@ -10,7 +13,7 @@
     body{background:#f4f2ec;color:#17231f}.validation{max-width:1120px;margin:auto;padding:32px 20px 70px}
     .validation header{margin-bottom:28px}.validation h1{font-size:clamp(2rem,5vw,4rem);line-height:1;margin:.3em 0}
     .notice{background:#fff4d8;border:1px solid #e5c978;border-radius:18px;padding:18px;margin:24px 0}
-    .cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+    .cases{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
     .case{background:#fff;border-radius:20px;padding:20px;box-shadow:0 8px 25px #18322812}.case h2{margin:0 0 8px}
     .score{color:#49645b;margin:0 0 15px}.points{margin:0;padding-left:22px}.points li{margin:8px 0}.tag{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#806b2a}
     .actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}.actions a{display:inline-block;padding:12px 18px;border-radius:999px;background:#183c32;color:white;text-decoration:none}
@@ -19,6 +22,7 @@
     .review-options label{border:1px solid #b9c8c1;border-radius:999px;cursor:pointer;padding:8px 12px}.review-options label:has(input:checked){background:#183c32;color:#fff;border-color:#183c32}.review-options input{margin-right:6px}
     .review textarea{box-sizing:border-box;width:100%;min-height:76px;margin-top:12px;border:1px solid #b9c8c1;border-radius:12px;padding:10px;font:inherit}
     .review-summary{background:#e9f2ee;border-radius:18px;padding:18px;margin:24px 0}.review-summary p{margin:.35em 0}.review-summary button{border:0;border-radius:999px;background:#183c32;color:#fff;padding:11px 16px;cursor:pointer}.review-summary button:disabled{opacity:.5;cursor:not-allowed}.review-summary .reset-review{background:transparent;color:#183c32;border:1px solid #183c32;margin-left:8px}
+    @media(max-width:700px){.cases{grid-template-columns:1fr}.review-options label{min-height:44px;display:inline-flex;align-items:center}}
   </style>
 </head>
 <body><a class="skip-link" href="#mainContent">Перейти к содержанию</a><main id="mainContent" class="validation">
@@ -26,7 +30,7 @@
   <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До вашего подтверждения результат обозначен как черновик.</div>
   <section class="review-summary" aria-live="polite"><strong>Ход проверки</strong><p id="reviewProgress">Проверено: 0 из 10</p><p>Ответы сохраняются только в этом браузере.</p><button id="exportReview" type="button" disabled>Скачать замечания</button><button id="resetReview" class="reset-review" type="button">Очистить ответы</button></section>
   <section class="cases" id="cases"></section>
-  <div class="actions"><a href="index.html#picker">Открыть калькулятор</a></div>
+  <div class="actions"><a href="index.html?review=1#picker">Открыть экспертный режим</a><a class="secondary" href="privacy.html">Конфиденциальность</a></div>
 </main>
 <script>
 const cases=[
@@ -52,9 +56,9 @@ document.querySelector('#cases').innerHTML=cases.map(([name,scores,points],i)=>{
 }).join('');
 
 function saveReviews(){
-  localStorage.setItem(storageKey,JSON.stringify(reviews));
+  let saved=true;try{localStorage.setItem(storageKey,JSON.stringify(reviews))}catch{saved=false}
   const checked=Object.values(reviews).filter(item=>item.verdict).length;
-  document.querySelector('#reviewProgress').textContent=`Проверено: ${checked} из ${cases.length}`;
+  document.querySelector('#reviewProgress').textContent=`Проверено: ${checked} из ${cases.length}${saved?'':' · сохранение в браузере недоступно'}`;
   document.querySelector('#exportReview').disabled=checked===0;
 }
 
@@ -88,7 +92,7 @@ document.querySelector('#exportReview').addEventListener('click',()=>{
 document.querySelector('#resetReview').addEventListener('click',()=>{
   if(!confirm('Очистить все оценки и комментарии?'))return;
   reviews={};
-  localStorage.removeItem(storageKey);
+  try{localStorage.removeItem(storageKey)}catch{}
   document.querySelectorAll('.review input').forEach(input=>{input.checked=false});
   document.querySelectorAll('.review textarea').forEach(textarea=>{textarea.value=''});
   saveReviews();
