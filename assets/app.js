@@ -112,7 +112,7 @@ const pointAtlas={
   RP8:'leg-inner',
   TR3:'hand-back',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
-  VB36:'leg-front',VB38:'leg-front',VB43:'foot-top'
+  VB36:'leg-front',VB43:'foot-top'
 };
 
 const atlasRotation={

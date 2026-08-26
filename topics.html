@@ -76,7 +76,15 @@
       <p class="topic-lead">Методика «Будь стройной» — авторская система, а не медицинский стандарт. На сайте она представлена как способ организовать режим и наблюдать за привычками, без обещаний гарантированного снижения веса.</p>
       <p>Правильное питание — не временная диета, а система повседневных привычек. Не стоит ожидать результата на следующий день: первые два–три месяца лучше воспринимать как период адаптации и наблюдения за самочувствием, насыщением и устойчивостью нового режима. Этот срок — ориентир, а не гарантия снижения веса или другого результата.</p>
       <div class="facts"><article><h3>Что можно использовать</h3><p>Осознанный режим питания, внимание к насыщению, планирование рациона и выбор менее обработанных продуктов.</p></article><article><h3>Базовая проверка</h3><p>Рацион должен оставаться разнообразным, достаточным и сбалансированным по энергии и питательным веществам.</p></article><article><h3>Когда нужна помощь</h3><p>При диабете, заболеваниях ЖКТ или почек, беременности и расстройствах пищевого поведения рацион согласуют с врачом или диетологом.</p></article></div>
-      <div class="recommendation"><p class="eyebrow dark">Готовится</p><h3>Соберите пример дневного рациона</h3><p>В будущем калькулятор позволит выбрать варианты завтрака, обеда и ужина, посмотреть объяснение сочетаний и заменить продукт подходящим аналогом.</p><p>Калькулятор предназначен для планирования рациона и не рассчитывает лечебную диету.</p></div>
+      <div class="recommendation nutrition-calculator"><p class="eyebrow dark">Калькулятор питания</p><h3>Соберите пример дневного рациона</h3><p>Выберите по одному варианту на каждый основной приём пищи. Подсказки пересказывают принципы авторской системы Татьяны Малаховой.</p>
+        <div class="meal-grid">
+          <label class="meal-card"><span>Завтрак</span><select data-meal="breakfast" aria-label="Выберите завтрак"></select><small data-meal-note="breakfast"></small></label>
+          <label class="meal-card"><span>Обед</span><select data-meal="lunch" aria-label="Выберите обед"></select><small data-meal-note="lunch"></small></label>
+          <label class="meal-card"><span>Ужин</span><select data-meal="dinner" aria-label="Выберите ужин"></select><small data-meal-note="dinner"></small></label>
+        </div>
+        <div class="meal-result" id="mealSummary" aria-live="polite"></div>
+        <p class="calculator-note">Это ориентир для планирования, а не расчёт калорий или лечебной диеты. Калькулятор не учитывает аллергии, лекарства и заболевания; индивидуальные ограничения согласуйте с врачом или диетологом.</p>
+      </div>
       <div class="source-list"><p>Авторское описание: <a href="https://bud-stroynoy.ru/" target="_blank" rel="noopener noreferrer">официальный сайт Татьяны Малаховой</a>.</p><p>Базовые ориентиры: <a href="https://www.who.int/news-room/fact-sheets/detail/healthy-diet" target="_blank" rel="noopener noreferrer">ВОЗ — здоровое питание</a>.</p></div>
     </div></div></section>
 
@@ -91,5 +99,6 @@
   </main>
 
   <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="index.html"><span>Т</span>ТКМ</a><p>Справочные материалы для осознанного выбора.</p></div><a class="footer-return" href="index.html#picker">Перейти к подбору точек →</a></div></footer>
+  <script src="assets/nutrition-calculator.js"></script>
 </body>
 </html>
