@@ -315,7 +315,7 @@
 .protocol-card {
   position: relative;
   display: grid;
-  grid-template-columns: 185px 1fr;
+  grid-template-columns: minmax(0, 185px) minmax(0, 1fr);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -342,6 +342,8 @@
   border: 0;
   padding: 0;
   overflow: hidden;
+  max-width: 100%;
+  min-width: 0;
   background: #e9ede8;
   cursor: pointer;
 }
@@ -431,7 +433,12 @@
 .trial-chip.expired { background: #9b3d36; }
 
 .protocol-body {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  overflow: hidden;
   padding: 20px;
+  background: #fff;
 }
 
 .protocol-body > span {

@@ -1,4 +1,4 @@
-const state={engine:null,mode:'symptoms',selected:[],diagnosis:null,protocol:[],scores:[],symptomIndex:[],diagnosisIndex:[],searchTimer:null};
+const state={engine:null,mode:'symptoms',selected:[],diagnoses:[],protocol:[],scores:[],symptomIndex:[],diagnosisIndex:[],searchTimer:null};
 const $=selector=>document.querySelector(selector);
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const normalize=value=>String(value??'').toLocaleLowerCase('ru-RU').replace(/ё/g,'е').replace(/[-–—.]/g,' ').replace(/\s+/g,' ').trim();
@@ -46,7 +46,8 @@ function renderSuggestions(){
 
 function renderDiagnosisSuggestions(){
   const query=normalize($('#diagnosisSearch').value);
-  let names=state.diagnosisIndex;
+  const selected=new Set(state.diagnoses);
+  let names=state.diagnosisIndex.filter(item=>!selected.has(item.name));
   if(query)names=names.filter(item=>item.search.includes(query));
   $('#diagnosisSuggestions').innerHTML=names.slice(0,12).map(item=>`<button type="button" data-select-diagnosis="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>`).join('')||'<small>Совпадений не найдено. Попробуйте сократить запрос.</small>';
 }
@@ -62,7 +63,7 @@ function renderSelected(){
 }
 
 function renderSelectedDiagnosis(){
-  $('#selectedDiagnosis').innerHTML=state.diagnosis?`<button type="button" data-clear-diagnosis>${escapeHtml(state.diagnosis)} <span>×</span></button>`:'<small>Пока ничего не выбрано</small>';
+  $('#selectedDiagnosis').innerHTML=state.diagnoses.length?state.diagnoses.map(name=>`<button type="button" data-remove-diagnosis="${escapeHtml(name)}">${escapeHtml(name)} <span>×</span></button>`).join(''):'<small>Пока ничего не выбрано</small>';
   renderDiagnosisSuggestions();
 }
 
@@ -124,6 +125,12 @@ function atlasPhoto(code){
   return image?{src:`assets/point-atlas/${image}.png`,orientation:atlasRotation[image]||''}:null;
 }
 
+function analyzeDiagnoses(selected){
+  const scores=new Map();
+  selected.forEach(diagnosis=>Object.entries(state.engine.diagnoses[diagnosis]||{}).forEach(([meridian,weight])=>scores.set(meridian,(scores.get(meridian)||0)+weight)));
+  return [...scores.entries()].sort((a,b)=>b[1]-a[1]);
+}
+
 function buildProtocol(scores,acutePain,pointLimit){
   if(!scores.length)return [];
   const points=[],seen=new Set();
@@ -164,9 +171,9 @@ function buildProtocol(scores,acutePain,pointLimit){
 function calculate(){
   if(!requireTrial())return;
   if(state.mode==='symptoms'&&!state.selected.length){alert('Выберите хотя бы одну жалобу.');return}
-  if(state.mode==='diagnosis'&&!state.diagnosis){alert('Выберите диагноз.');return}
+  if(state.mode==='diagnosis'&&!state.diagnoses.length){alert('Выберите хотя бы один диагноз.');return}
   state.scores=state.mode==='diagnosis'
-    ?Object.entries(state.engine.diagnoses[state.diagnosis]||{}).sort((a,b)=>b[1]-a[1])
+    ?analyzeDiagnoses(state.diagnoses)
     :analyzeSymptoms(state.selected);
   const value=$('#pointLimit').value;
   const limit=value==='all'?null:Number(value);
@@ -176,7 +183,7 @@ function calculate(){
 
 function renderProtocol(){
   const top=state.scores.slice(0,3);
-  const source=state.mode==='diagnosis'?`<div><span>Диагноз</span><b>${escapeHtml(state.diagnosis)}</b></div>`:`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>`;
+  const source=state.mode==='diagnosis'?`<div><span>Выбрано диагнозов</span><b>${state.diagnoses.length}</b></div>`:`<div><span>Выбрано жалоб</span><b>${state.selected.length}</b></div>`;
   $('#prioritySummary').innerHTML=`${source}${top.map(([code,score],index)=>`<div><span>${index===0?'Ведущий меридиан':`Приоритет ${index+1}`}</span><b>${escapeHtml(state.engine.meridians[code]?.name||code)} · ${score}</b></div>`).join('')}`;
   $('#protocolGrid').innerHTML=state.protocol.map((point,index)=>{
     const photo=atlasPhoto(point.code);
@@ -196,7 +203,7 @@ function showPoint(index){
 
 function reportText(){
   const priorities=state.scores.slice(0,5).map(([code,score])=>`${state.engine.meridians[code]?.name||code}: ${score}`).join(', ');
-  const source=state.mode==='diagnosis'?`Диагноз: ${state.diagnosis}`:`Жалобы: ${state.selected.join(', ')}`;
+  const source=state.mode==='diagnosis'?`Диагнозы: ${state.diagnoses.join(', ')}`:`Жалобы: ${state.selected.join(', ')}`;
   return `ЧЕРНОВИК ПРОТОКОЛА ТКМ\n\nСправочно-расчётный результат. Требует проверки квалифицированным специалистом.\n\n${source}\nПриоритетные меридианы: ${priorities}\n\n${state.protocol.map((p,i)=>`${i+1}. ${p.code}${p.name?` (${p.name})`:''}\nМеридиан: ${p.meridianName}\nДействие: ${p.action}\nПравило: ${p.rule}\nТип: ${p.pointType}\nОписание: ${p.pointDescription}`).join('\n\n')}`;
 }
 function download(name,type,content){const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
@@ -212,14 +219,14 @@ function exportProtocol(kind){
 $('#symptomSearch').addEventListener('input',()=>scheduleSearch(renderSuggestions));
 $('#diagnosisSearch').addEventListener('input',()=>scheduleSearch(renderDiagnosisSuggestions));
 $('#clearSymptoms').addEventListener('click',()=>{state.selected=[];renderSelected();$('#protocolResult').hidden=true});
-$('#clearDiagnosis').addEventListener('click',()=>{state.diagnosis=null;renderSelectedDiagnosis();$('#protocolResult').hidden=true});
+$('#clearDiagnosis').addEventListener('click',()=>{state.diagnoses=[];renderSelectedDiagnosis();$('#protocolResult').hidden=true});
 $('#calculateProtocol').addEventListener('click',calculate);
 document.addEventListener('click',event=>{
   const mode=event.target.closest('[data-mode]');if(mode)setMode(mode.dataset.mode);
   const add=event.target.closest('[data-add-symptom]');if(add&&!state.selected.includes(add.dataset.addSymptom)){state.selected.push(add.dataset.addSymptom);$('#symptomSearch').value='';renderSelected()}
   const remove=event.target.closest('[data-remove-symptom]');if(remove){state.selected=state.selected.filter(item=>item!==remove.dataset.removeSymptom);renderSelected()}
-  const diagnosis=event.target.closest('[data-select-diagnosis]');if(diagnosis){state.diagnosis=diagnosis.dataset.selectDiagnosis;$('#diagnosisSearch').value='';renderSelectedDiagnosis()}
-  if(event.target.closest('[data-clear-diagnosis]')){state.diagnosis=null;renderSelectedDiagnosis()}
+  const diagnosis=event.target.closest('[data-select-diagnosis]');if(diagnosis&&!state.diagnoses.includes(diagnosis.dataset.selectDiagnosis)){state.diagnoses.push(diagnosis.dataset.selectDiagnosis);$('#diagnosisSearch').value='';renderSelectedDiagnosis()}
+  const removeDiagnosis=event.target.closest('[data-remove-diagnosis]');if(removeDiagnosis){state.diagnoses=state.diagnoses.filter(item=>item!==removeDiagnosis.dataset.removeDiagnosis);renderSelectedDiagnosis()}
   const detail=event.target.closest('[data-point-detail]');if(detail)showPoint(Number(detail.dataset.pointDetail));
   if(event.target.closest('[data-open-export]'))$('#exportDialog').showModal();
   if(event.target.closest('[data-close-dialog]'))event.target.closest('dialog').close();
