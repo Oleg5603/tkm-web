@@ -52,7 +52,7 @@ assert.match(privacy, /Конфиденциальность/);
 assert.match(terms, /Условия использования/);
 assert.match(accessibility, /prefers-reduced-motion: reduce/);
 assert.match(accessibility, /:focus-visible/);
-assert.equal(Object.keys(diagnoses).length, 63);
+assert.equal(Object.keys(diagnoses).length, 64);
 assert.deepEqual(diagnoses['Гипертония'], {F: 6, R: 4, VB: 3});
 assert.match(app, /state\.diagnosisIndex=buildSearchIndex\(diagnoses\)/);
 assert.match(app, /diagnoses:\[\]/);
@@ -69,8 +69,23 @@ assert.match(css, /\.point-focus-label\s*\{[^}]*background:\s*#b7352d/);
 assert.match(app, /class="point-focus-label"/);
 assert.match(app, /const atlasRotation=/);
 assert.match(app, /GI11:'arm-outer'/);
-assert.match(app, /R7:'leg-inner'/);
-for (const unsupported of ['E34','F6','R1','R5','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
+assert.match(app, /P9:'p9-wrist\.png'/);
+assert.match(css, /\.point-image img\.scale-85\s*\{[^}]*scale:\s*\.85/);
+assert.ok(fs.existsSync('assets/point-atlas/p9-wrist.png'), 'Нет отдельной фотографии запястья для P9');
+assert.equal(data.symptoms['Псориаз'], undefined, 'Псориаз не должен отображаться как жалоба');
+assert.ok(diagnoses['Псориаз'], 'Псориаз должен оставаться в списке диагнозов');
+const auditedAtlasPairs = {
+  C6:'arm-inner',C7:'arm-inner',C9:'hand-back',
+  E41:'foot-top',E45:'foot-top',F2:'foot-top',F8:'leg-inner',
+  GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
+  IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
+  MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
+  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',RP8:'leg-inner',
+  TR3:'hand-back',V63:'foot-side',V65:'foot-side',V67:'foot-side',
+  VB36:'leg-front',VB43:'foot-top'
+};
+for (const [code,image] of Object.entries(auditedAtlasPairs)) assert.match(app, new RegExp(`${code}:'${image.replace('.', '\\.')}'`));
+for (const unsupported of ['E34','F6','R1','R5','R7','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="exportReview"/);
 assert.match(validation, /id="resetReview"/);
@@ -89,4 +104,4 @@ for (let i = 0; i < 1000; i += 1) index.filter(item => item.search.includes('б�
 const elapsed = performance.now() - started;
 assert.ok(elapsed / 1000 < 1.5, `Один поиск слишком медленный: ${(elapsed / 1000).toFixed(3)} мс`);
 
-console.log(`OK: diagnoses=63, symptoms=${index.length}, search1000=${elapsed.toFixed(1)}ms`);
+console.log(`OK: diagnoses=${Object.keys(diagnoses).length}, symptoms=${index.length}, search1000=${elapsed.toFixed(1)}ms`);

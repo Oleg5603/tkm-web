@@ -96,8 +96,8 @@ const pointAtlas={
   GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
-  P5:'arm-inner',P6:'arm-inner',P9:'arm-inner',
-  R7:'leg-inner',RP8:'leg-inner',
+  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',
+  RP8:'leg-inner',
   TR3:'hand-back',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
   VB36:'leg-front',VB43:'foot-top'
@@ -110,7 +110,9 @@ const atlasRotation={
 
 function atlasPhoto(code){
   const image=pointAtlas[code];
-  return image?{src:`assets/point-atlas/${image}.webp`,orientation:atlasRotation[image]||''}:null;
+  if(!image)return null;
+  const src=image.includes('.')?`assets/point-atlas/${image}`:`assets/point-atlas/${image}.webp`;
+  return {src,orientation:code==='P9'?'scale-85':atlasRotation[image]||''};
 }
 
 function analyzeDiagnoses(selected){

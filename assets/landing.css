@@ -375,6 +375,7 @@
 
 .point-image img.rotate-neg-90 { rotate: -90deg; scale: .72; }
 .point-image img.rotate-180 { rotate: 180deg; }
+.point-image img.scale-85 { scale: .85; }
 
 .point-image:hover img { transform: scale(1.025); }
 .point-image img { transition: transform .2s ease; }
@@ -382,6 +383,7 @@
 .detail-image-frame { position: relative; display: grid; overflow: hidden; place-items: center; min-height: 360px; border-radius: 15px; background: #edf0ec; }
 .detail-image-frame .detail-image.rotate-neg-90 { rotate: -90deg; scale: .72; }
 .detail-image-frame .detail-image.rotate-180 { rotate: 180deg; }
+.detail-image-frame .detail-image.scale-85 { scale: .85; }
 
 .point-image.placeholder {
   display: grid;
