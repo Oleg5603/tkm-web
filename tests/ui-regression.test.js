@@ -13,6 +13,8 @@ const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
 const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
 const privacy = fs.readFileSync('privacy.html', 'utf8');
 const terms = fs.readFileSync('terms.html', 'utf8');
+const bioage = fs.readFileSync('biological-age.html', 'utf8');
+const bioageJs = fs.readFileSync('assets/biological-age.js', 'utf8');
 
 assert.match(html, /data-mode="diagnosis"/);
 assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
@@ -29,7 +31,13 @@ assert.match(html, /не являются отзывами реальных кл
 assert.match(html, /href="#about-me">Обо мне/);
 assert.match(html, /Обо мне/);
 assert.match(html, /Олег Палкин/);
-assert.match(html, /понятный черновик точек/);
+assert.match(html, /понятный список точек/);
+assert.match(html, /class="hero-result-demo"/);
+assert.equal((html.match(/class="hero-point-list"/g) || []).length, 1, 'В hero должен быть один понятный пример списка точек');
+assert.doesNotMatch(html, /class="body-map"/);
+assert.match(html, /Защищённая подписка будет подключена через некоторое время/);
+assert.match(html, /href="biological-age\.html"/);
+assert.match(html, /Научный расчёт PhenoAge/);
 assert.match(html, /Быстрее разобраться/);
 assert.match(app, /const gavrikAnswers=/);
 assert.match(wideCss, /\.topic\.wrap/);
@@ -65,7 +73,9 @@ for (const page of [html, validation, topics]) {
   assert.match(page, /assets\/accessibility\.css/);
 }
 assert.match(privacy, /Конфиденциальность/);
+assert.match(privacy, /Показатели калькулятора PhenoAge обрабатываются локально, не сохраняются/);
 assert.match(terms, /Условия использования/);
+assert.match(terms, /исследовательскую оценку фенотипического возраста/);
 assert.match(accessibility, /prefers-reduced-motion: reduce/);
 assert.match(accessibility, /:focus-visible/);
 assert.equal(Object.keys(diagnoses).length, 64);
@@ -103,12 +113,28 @@ const auditedAtlasPairs = {
 for (const [code,image] of Object.entries(auditedAtlasPairs)) assert.match(app, new RegExp(`${code}:'${image.replace('.', '\\.')}'`));
 for (const unsupported of ['E34','F6','R1','R5','R7','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
 assert.match(validation, /id="reviewProgress"/);
+assert.match(validation, /id="reviewState"/);
+assert.match(validation, /Проверка завершена/);
+assert.match(validation, /Скачать итог оценки/);
 assert.match(validation, /id="exportReview"/);
 assert.match(validation, /id="resetReview"/);
 assert.match(validation, /tkm-expert-review-v1/);
 assert.match(validation, /localStorage\.removeItem\(storageKey\)/);
 assert.match(validation, /href="index\.html\?review=1#picker"/);
 assert.doesNotMatch(validation, /href="index\.html#calculator"/);
+for (const page of [html, validation, topics, privacy, terms, bioage, bioageJs, app]) {
+  assert.doesNotMatch(page, /специалист/iu, 'Слово «специалист» не должно оставаться в публичных текстах');
+  assert.doesNotMatch(page, /черновик/iu, 'Слово «черновик» нужно заменить словом «список»');
+}
+assert.match(bioage, /id="bioageForm"/);
+assert.match(bioage, /Значения не сохраняются и не отправляются на сервер/);
+assert.match(bioage, /pubmed\.ncbi\.nlm\.nih\.gov\/29676998/);
+assert.match(bioage, /pubmed\.ncbi\.nlm\.nih\.gov\/34725754/);
+assert.equal((bioage.match(/name="(?:age|albumin|creatinine|glucose|crp|lymphocytes|mcv|rdw|alp|wbc)"/g) || []).length, 10, 'Для PhenoAge нужны возраст и девять показателей');
+assert.match(bioageJs, /Math\.log\(clean\.crp \/ 10\)/);
+assert.match(bioageJs, /-19\.90667/);
+assert.match(bioageJs, /0\.08035356 \* clean\.age/);
+assert.match(css, /\.landing-page \.doctor-about\{order:8\}/);
 
 const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
 for (const name of requiredAtlasImages) assert.ok(fs.existsSync(`assets/point-atlas/${name}.webp`), `Нет оптимизированной фотографии ${name}.webp`);

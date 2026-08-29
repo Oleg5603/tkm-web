@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <title>Проверка расчёта ТКМ — для специалиста</title>
+  <title>Экспертная проверка расчёта ТКМ</title>
   <link rel="stylesheet" href="assets/landing.css">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
   <style>
@@ -21,14 +21,14 @@
     .review{border-top:1px solid #dfe5e1;margin-top:18px;padding-top:16px}.review legend{font-weight:700;margin-bottom:10px}.review-options{display:flex;gap:8px;flex-wrap:wrap}
     .review-options label{border:1px solid #b9c8c1;border-radius:999px;cursor:pointer;padding:8px 12px}.review-options label:has(input:checked){background:#183c32;color:#fff;border-color:#183c32}.review-options input{margin-right:6px}
     .review textarea{box-sizing:border-box;width:100%;min-height:76px;margin-top:12px;border:1px solid #b9c8c1;border-radius:12px;padding:10px;font:inherit}
-    .review-summary{background:#e9f2ee;border-radius:18px;padding:18px;margin:24px 0}.review-summary p{margin:.35em 0}.review-summary button{border:0;border-radius:999px;background:#183c32;color:#fff;padding:11px 16px;cursor:pointer}.review-summary button:disabled{opacity:.5;cursor:not-allowed}.review-summary .reset-review{background:transparent;color:#183c32;border:1px solid #183c32;margin-left:8px}
+    .review-summary{background:#e9f2ee;border:1px solid transparent;border-radius:18px;padding:18px;margin:24px 0}.review-summary.is-complete{border-color:#54a27f;background:#e3f4eb}.review-summary p{margin:.35em 0}.review-state{font-weight:750}.review-summary.is-complete .review-state{color:#116044}.review-summary button{border:0;border-radius:999px;background:#183c32;color:#fff;padding:11px 16px;cursor:pointer}.review-summary button:disabled{opacity:.5;cursor:not-allowed}.review-summary .reset-review{background:transparent;color:#183c32;border:1px solid #183c32;margin-left:8px}
     @media(max-width:700px){.cases{grid-template-columns:1fr}.review-options label{min-height:44px;display:inline-flex;align-items:center}}
   </style>
 </head>
 <body><a class="skip-link" href="#mainContent">Перейти к содержанию</a><main id="mainContent" class="validation">
   <header><p class="tag">Экспертная приёмка · версия 25.08.2026</p><h1>Проверьте логику подбора</h1><p>Десять одиночных жалоб рассчитаны тем же алгоритмом, что и основная веб-версия. Лимит — 7 точек, признак острой боли выключен.</p></header>
-  <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До вашего подтверждения результат обозначен как черновик.</div>
-  <section class="review-summary" aria-live="polite"><strong>Ход проверки</strong><p id="reviewProgress">Проверено: 0 из 10</p><p>Ответы сохраняются только в этом браузере.</p><button id="exportReview" type="button" disabled>Скачать замечания</button><button id="resetReview" class="reset-review" type="button">Очистить ответы</button></section>
+  <div class="notice"><strong>Главный вопрос:</strong> корректно ли считать каждую положительную связь жалобы с меридианом признаком недостаточности и применять к нему тонизацию? До подтверждения список точек не используется как рекомендация.</div>
+  <section class="review-summary" id="reviewSummary" aria-live="polite"><strong>Ход проверки</strong><p id="reviewProgress">Проверено: 0 из 10</p><p class="review-state" id="reviewState">Отметьте каждый случай. Ответы сохраняются только в этом браузере.</p><button id="exportReview" type="button" disabled>Скачать текущие оценки</button><button id="resetReview" class="reset-review" type="button">Очистить ответы</button></section>
   <section class="cases" id="cases"></section>
   <div class="actions"><a href="index.html?review=1#picker">Открыть экспертный режим</a><a class="secondary" href="privacy.html">Конфиденциальность</a></div>
 </main>
@@ -52,14 +52,18 @@ const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;'
 
 document.querySelector('#cases').innerHTML=cases.map(([name,scores,points],i)=>{
   const review=reviews[i]||{};
-  return `<article class="case"><p class="tag">Кейс ${i+1}</p><h2>${name}</h2><p class="score">${scores}</p><ol class="points">${points.map(x=>`<li>${x}</li>`).join('')}</ol><fieldset class="review"><legend>Оценка специалиста</legend><div class="review-options"><label><input type="radio" name="verdict-${i}" value="correct" ${review.verdict==='correct'?'checked':''}>Верно</label><label><input type="radio" name="verdict-${i}" value="revise" ${review.verdict==='revise'?'checked':''}>Нужно исправить</label></div><textarea data-note="${i}" placeholder="Что изменить в подборе или объяснении?">${escapeHtml(review.note)}</textarea></fieldset></article>`;
+  return `<article class="case"><p class="tag">Кейс ${i+1}</p><h2>${name}</h2><p class="score">${scores}</p><ol class="points">${points.map(x=>`<li>${x}</li>`).join('')}</ol><fieldset class="review"><legend>Ваша оценка</legend><div class="review-options"><label><input type="radio" name="verdict-${i}" value="correct" ${review.verdict==='correct'?'checked':''}>Верно</label><label><input type="radio" name="verdict-${i}" value="revise" ${review.verdict==='revise'?'checked':''}>Нужно исправить</label></div><textarea data-note="${i}" placeholder="Что изменить в подборе или объяснении?">${escapeHtml(review.note)}</textarea></fieldset></article>`;
 }).join('');
 
 function saveReviews(){
   let saved=true;try{localStorage.setItem(storageKey,JSON.stringify(reviews))}catch{saved=false}
   const checked=Object.values(reviews).filter(item=>item.verdict).length;
-  document.querySelector('#reviewProgress').textContent=`Проверено: ${checked} из ${cases.length}${saved?'':' · сохранение в браузере недоступно'}`;
+  const complete=checked===cases.length;
+  document.querySelector('#reviewProgress').textContent=complete?`Проверка завершена: ${checked} из ${cases.length}`:`Проверено: ${checked} из ${cases.length}${saved?'':' · сохранение в браузере недоступно'}`;
+  document.querySelector('#reviewState').textContent=complete?'Все оценки сохранены в этом браузере. Скачайте итоговый файл, чтобы передать результат.':'Отметьте каждый случай. Ответы сохраняются только в этом браузере.';
+  document.querySelector('#reviewSummary').classList.toggle('is-complete',complete);
   document.querySelector('#exportReview').disabled=checked===0;
+  document.querySelector('#exportReview').textContent=complete?'Скачать итог оценки':'Скачать текущие оценки';
 }
 
 document.querySelector('#cases').addEventListener('change',event=>{

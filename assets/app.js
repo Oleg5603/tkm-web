@@ -14,7 +14,7 @@ function requireSafeContext(){
 }
 function pointVisual(point){
   const code=escapeHtml(point.code);
-  return `<div class="point-visual" role="img" aria-label="Справочная карточка точки ${code}"><svg viewBox="0 0 180 210" aria-hidden="true"><path d="M90 19c-20 0-31 15-31 34 0 13 6 22 13 30l-10 39-20 69m48-108v108m18-108 10 39 20 69"/><circle cx="90" cy="50" r="23"/><circle cx="90" cy="112" r="9"/><path d="M55 104h70"/><text x="90" y="116">${code}</text></svg><strong>${code}</strong><small>Справочная схема. Точную локализацию проверяет специалист.</small></div>`;
+  return `<div class="point-visual" role="img" aria-label="Справочная карточка точки ${code}"><svg viewBox="0 0 180 210" aria-hidden="true"><path d="M90 19c-20 0-31 15-31 34 0 13 6 22 13 30l-10 39-20 69m48-108v108m18-108 10 39 20 69"/><circle cx="90" cy="50" r="23"/><circle cx="90" cy="112" r="9"/><path d="M55 104h70"/><text x="90" y="116">${code}</text></svg><strong>${code}</strong><small>Справочная схема. Точную локализацию сверяйте по учебному атласу.</small></div>`;
 }
 
 function buildSearchIndex(items){return Object.keys(items||{}).map(name=>({name,search:normalize(name)}))}
@@ -191,19 +191,19 @@ function renderProtocol(){
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
   const photo=atlasPhoto(point.code);
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и наличие этого обозначения на исходной схеме проверяет специалист.</p><h3>Почему точка в черновике</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.</p><h3>Почему точка в списке</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
 function reportText(){
   const priorities=state.scores.slice(0,5).map(([code,score])=>`${state.engine.meridians[code]?.name||code}: ${score}`).join(', ');
   const source=state.mode==='diagnosis'?`Диагнозы: ${state.diagnoses.join(', ')}`:`Жалобы: ${state.selected.join(', ')}`;
-  return `ЧЕРНОВИК ПРОТОКОЛА ТКМ\n\nСправочно-расчётный результат. Требует проверки квалифицированным специалистом.\n\n${source}\nПриоритетные меридианы: ${priorities}\n\n${state.protocol.map((p,i)=>`${i+1}. ${p.code}${p.name?` (${p.name})`:''}\nМеридиан: ${p.meridianName}\nДействие: ${p.action}\nПравило: ${p.rule}\nТип: ${p.pointType}\nОписание: ${p.pointDescription}`).join('\n\n')}`;
+  return `СПИСОК ТОЧЕК ТКМ\n\nСправочно-расчётный результат. Перед применением перепроверьте точки и противопоказания.\n\n${source}\nПриоритетные меридианы: ${priorities}\n\n${state.protocol.map((p,i)=>`${i+1}. ${p.code}${p.name?` (${p.name})`:''}\nМеридиан: ${p.meridianName}\nДействие: ${p.action}\nПравило: ${p.rule}\nТип: ${p.pointType}\nОписание: ${p.pointDescription}`).join('\n\n')}`;
 }
 function download(name,type,content){const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([content],{type}));link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
 function exportProtocol(kind){
   if(!state.protocol.length)return;
-  const text=reportText().replace('ЧЕРНОВИК ПРОТОКОЛА ТКМ','ПРЕДВАРИТЕЛЬНЫЙ ПРОТОКОЛ ТКМ');
+  const text=reportText();
   if(kind==='txt')download('protokol-tkm.txt','text/plain;charset=utf-8',text);
   if(kind==='word')download('protokol-tkm.doc','application/msword;charset=utf-8',`<!doctype html><meta charset="utf-8"><body><pre style="white-space:pre-wrap;font-family:Arial">${escapeHtml(text)}</pre></body>`);
   if(kind==='pdf'){const win=open('','_blank');win.document.write(`<!doctype html><meta charset="utf-8"><title>Предварительный протокол ТКМ</title><style>body{font-family:Arial;max-width:800px;margin:40px auto;white-space:pre-wrap}</style>${escapeHtml(text)}`);win.document.close();setTimeout(()=>win.print(),500)}
@@ -233,8 +233,8 @@ Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url
   .then(([engine,diagnoses])=>{
     state.engine={...engine,diagnoses};state.symptomIndex=buildSearchIndex(engine.symptoms);state.diagnosisIndex=buildSearchIndex(diagnoses);renderSelected();renderSelectedDiagnosis();
     $('#calculateProtocol').disabled=!reviewMode;
-    $('#calculateProtocol').textContent=reviewMode?'Сформировать экспертный черновик':'Расчёт ожидает экспертной проверки';
-    $('#engineStatus').textContent=reviewMode?'Экспертный режим: результат остаётся непроверенным черновиком и не является назначением.':'Публичный расчёт временно закрыт до завершения экспертной проверки.';
+    $('#calculateProtocol').textContent=reviewMode?'Сформировать список точек':'Расчёт ожидает экспертной проверки';
+    $('#engineStatus').textContent=reviewMode?'Экспертный режим: список ещё не прошёл проверку и не является назначением.':'Публичный расчёт временно закрыт до завершения экспертной проверки.';
   })
   .catch(()=>{
     const message='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';
@@ -244,7 +244,7 @@ Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url
 const gavrikForm=document.querySelector('#gavrikForm');
 const gavrikAnswers=[
   [/питан|малахов/i,'В разделе «Материалы» собраны принципы системы Татьяны Малаховой и общие ориентиры здорового питания. Индивидуальные ограничения лучше согласовать с врачом.'],
-  [/точк|меридиан|протокол/i,'Выберите жалобу или диагноз в приложении. ТКМ ранжирует связанные меридианы, предлагает предварительный список точек и объясняет логику выбора. Результат обязательно проверяет специалист.'],
+  [/точк|меридиан|протокол/i,'Выберите жалобу или диагноз в приложении. ТКМ ранжирует связанные меридианы, предлагает предварительный список точек и объясняет логику выбора. Перед применением перепроверьте результат.'],
   [/диагноз/i,'Диагноз устанавливает врач. На сайте диагноз используется только как исходное условие для справочного расчёта, а не как медицинское заключение.'],
   [/боль|сроч|ухудш|температур/i,'При выраженной боли, резком ухудшении или тревожных симптомах не полагайтесь на сайт — обратитесь за очной медицинской помощью.'],
   [/кто|автор|олег|врач/i,'Автор проекта — Олег Палкин, врач, выпускник ПГМИ; специализация: рефлексотерапия и детская неврология.'],

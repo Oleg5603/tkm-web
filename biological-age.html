@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Калькулятор биологического возраста PhenoAge — ТКМ</title>
+  <meta name="description" content="Локальный расчёт фенотипического возраста PhenoAge по возрасту и девяти показателям анализа крови.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <link rel="stylesheet" href="assets/styles.css?v=20260825-1">
+  <link rel="stylesheet" href="assets/landing.css?v=20260829-5">
+  <link rel="stylesheet" href="assets/biological-age.css?v=20260829-1">
+  <link rel="stylesheet" href="assets/layout-wide.css?v=20260829-3">
+  <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
+</head>
+<body class="bioage-page">
+  <a class="skip-link" href="#mainContent">Перейти к калькулятору</a>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="ТКМ — на главную"><span>Т</span>ТКМ</a>
+      <nav aria-label="Навигация"><a href="index.html">Главная</a><a href="#calculator">Расчёт</a><a href="#method">О методе</a><a href="#sources">Источники</a></nav>
+      <a class="nav-action" href="index.html#picker">Подбор точек</a>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="bioage-hero">
+      <div class="wrap bioage-hero-grid">
+        <div>
+          <p class="eyebrow">Исследовательская модель Levine PhenoAge</p>
+          <h1>Рассчитайте свой <em>фенотипический возраст</em></h1>
+          <p>Введите показатели из свежего анализа крови. Модель сопоставит их с риском, характерным для определённого возраста, и покажет результат в годах.</p>
+          <a class="button primary" href="#calculator">Перейти к расчёту</a>
+        </div>
+        <aside class="bioage-intro-card" aria-label="Что потребуется для расчёта">
+          <span>Для расчёта</span>
+          <strong>Возраст + 9 показателей</strong>
+          <ul><li>Биохимический анализ крови</li><li>Общий анализ крови</li><li>С‑реактивный белок</li></ul>
+          <p>Все вычисления выполняются на вашем устройстве.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="bioage-calculator wrap" id="calculator" aria-labelledby="calculatorTitle">
+      <div class="bioage-heading">
+        <div><p class="eyebrow dark">Калькулятор</p><h2 id="calculatorTitle">Перенесите значения точно из бланка анализа</h2></div>
+        <p>Проверьте единицы измерения рядом с каждым полем. Для более сопоставимого результата используйте анализы, сданные в один день вне острого заболевания.</p>
+      </div>
+
+      <form id="bioageForm" class="bioage-form" novalidate>
+        <div class="bioage-fields">
+          <label><span>Хронологический возраст <b>лет</b></span><input name="age" type="number" min="20" max="84" step="1" inputmode="numeric" placeholder="Например, 55" required><small>Модель разработана для взрослых 20–84 лет.</small></label>
+          <label><span>Альбумин <b>г/л</b></span><input name="albumin" type="number" min="10" max="70" step="0.1" inputmode="decimal" placeholder="Например, 44" required><small>Albumin, не общий белок.</small></label>
+          <label><span>Креатинин <b>мкмоль/л</b></span><input name="creatinine" type="number" min="20" max="1500" step="0.1" inputmode="decimal" placeholder="Например, 80" required><small>Serum creatinine.</small></label>
+          <label><span>Глюкоза <b>ммоль/л</b></span><input name="glucose" type="number" min="1" max="40" step="0.01" inputmode="decimal" placeholder="Например, 5,1" required><small>Укажите фактическое значение анализа.</small></label>
+          <label><span>С‑реактивный белок <b>мг/л</b></span><input name="crp" type="number" min="0.01" max="500" step="0.01" inputmode="decimal" placeholder="Например, 1" required><small>CRP или высокочувствительный hs‑CRP; значение должно быть больше нуля.</small></label>
+          <label><span>Лимфоциты <b>%</b></span><input name="lymphocytes" type="number" min="1" max="80" step="0.1" inputmode="decimal" placeholder="Например, 30" required><small>Процент, не абсолютное число.</small></label>
+          <label><span>Средний объём эритроцита, MCV <b>фл</b></span><input name="mcv" type="number" min="50" max="130" step="0.1" inputmode="decimal" placeholder="Например, 90" required><small>В бланке также может быть обозначено «ср. объём эритр.».</small></label>
+          <label><span>Ширина распределения эритроцитов, RDW <b>%</b></span><input name="rdw" type="number" min="5" max="40" step="0.1" inputmode="decimal" placeholder="Например, 13" required><small>Нужно значение RDW‑CV в процентах.</small></label>
+          <label><span>Щелочная фосфатаза, ALP <b>Ед/л</b></span><input name="alp" type="number" min="5" max="1000" step="0.1" inputmode="decimal" placeholder="Например, 70" required><small>Не путайте с АЛТ и АСТ.</small></label>
+          <label><span>Лейкоциты, WBC <b>10⁹/л</b></span><input name="wbc" type="number" min="0.5" max="100" step="0.01" inputmode="decimal" placeholder="Например, 6" required><small>Численно равно 10³/мкл.</small></label>
+        </div>
+        <div class="bioage-actions">
+          <button class="button primary" type="submit">Рассчитать возраст</button>
+          <button class="button bioage-example" id="fillExample" type="button">Заполнить пример</button>
+          <button class="bioage-clear" type="reset">Очистить</button>
+        </div>
+        <p class="bioage-privacy"><span aria-hidden="true">✓</span> Значения не сохраняются и не отправляются на сервер.</p>
+        <p class="bioage-error" id="bioageError" role="alert" hidden></p>
+      </form>
+
+      <section class="bioage-result" id="bioageResult" aria-live="polite" hidden>
+        <div class="bioage-result-main"><span>Расчётный PhenoAge</span><strong><b id="phenoAgeValue">—</b> года</strong></div>
+        <div class="bioage-result-delta"><span>Разница с паспортным возрастом</span><strong id="phenoAgeDelta">—</strong><p id="phenoAgeMeaning"></p></div>
+        <p class="bioage-result-note">Это оценка по исследовательской модели, а не диагноз и не прогноз продолжительности жизни. Не меняйте лечение по результату калькулятора.</p>
+      </section>
+    </section>
+
+    <section class="bioage-method" id="method">
+      <div class="wrap bioage-method-grid">
+        <div><p class="eyebrow dark">Что означает результат</p><h2>Не «износ организма», а возрастной эквивалент набора анализов</h2></div>
+        <div>
+          <p>PhenoAge разработан Морган Левин и соавторами на данных взрослых участников NHANES. Девять лабораторных показателей и паспортный возраст объединяются в оценку, связанную с риском смертности в исходной выборке.</p>
+          <p>Результат выше паспортного возраста означает, что именно этот набор показателей в модели похож на более старший возраст; результат ниже — на более молодой. Острое воспаление, недавняя нагрузка, питание, лекарства и лабораторный метод могут заметно изменить отдельные показатели.</p>
+          <div class="bioage-warning"><strong>Важно:</strong> показатель полезен как ориентир для наблюдения в динамике, но не заменяет оценку врача и интерпретацию каждого анализа.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bioage-sources wrap" id="sources">
+      <p class="eyebrow dark">Методика и проверка</p>
+      <h2>Открытые научные источники</h2>
+      <div class="bioage-source-grid">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/29676998/" target="_blank" rel="noopener noreferrer"><span>Исходное исследование · 2018</span><strong>Levine et al. — An epigenetic biomarker of aging for lifespan and healthspan</strong><small>Публикация и описание клинического Phenotypic Age.</small></a>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/34725754/" target="_blank" rel="noopener noreferrer"><span>Независимый инструментарий · 2021</span><strong>Kwon &amp; Belsky — A toolkit for quantification of biological age</strong><small>Пакет BioAge для воспроизводимого расчёта биологического возраста.</small></a>
+        <a href="https://github.com/dayoonkwon/BioAge/blob/master/R/phenoage_calc.R" target="_blank" rel="noopener noreferrer"><span>Открытый исходный код</span><strong>Формула и коэффициенты BioAge</strong><small>Реализация, с которой сверена формула калькулятора.</small></a>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="index.html"><span>Т</span>ТКМ</a><p>Справочный помощник для осознанной заботы о здоровье.</p></div><div class="metrics"><a href="index.html">На главную</a><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a></div></div></footer>
+  <script src="assets/biological-age.js?v=20260829-1" defer></script>
+</body>
+</html>
