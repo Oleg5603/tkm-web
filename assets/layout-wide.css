@@ -74,10 +74,15 @@ body {
   }
 
   .gavrik-grid,
+  .hero-grid {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+
   .gavrik-grid > *,
   .gavrik-form,
   .gavrik-form > div,
-  .hero-grid,
   .hero-grid > *,
   .hero-copy {
     width: 100%;
