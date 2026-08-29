@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Калькулятор биологического возраста PhenoAge — ТКМ</title>
-  <meta name="description" content="Локальный расчёт фенотипического возраста PhenoAge по возрасту и девяти показателям анализа крови.">
+  <title>Калькуляторы PhenoAge и возраста выносливости — ТКМ</title>
+  <meta name="description" content="Два локальных расчёта: фенотипический возраст PhenoAge по анализам и ориентировочный возраст выносливости без анализов.">
   <meta name="robots" content="noindex,nofollow">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="assets/styles.css?v=20260825-1">
   <link rel="stylesheet" href="assets/landing.css?v=20260829-5">
-  <link rel="stylesheet" href="assets/biological-age.css?v=20260829-1">
+  <link rel="stylesheet" href="assets/biological-age.css?v=20260830-2">
   <link rel="stylesheet" href="assets/layout-wide.css?v=20260829-3">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
 </head>
@@ -19,7 +19,7 @@
   <header class="site-header">
     <div class="wrap nav">
       <a class="brand" href="index.html" aria-label="ТКМ — на главную"><span>Т</span>ТКМ</a>
-      <nav aria-label="Навигация"><a href="index.html">Главная</a><a href="#calculator">Расчёт</a><a href="#method">О методе</a><a href="#sources">Источники</a></nav>
+      <nav aria-label="Навигация"><a href="index.html">Главная</a><a href="#simple-calculator">Без анализов</a><a href="#calculator">По анализам</a><a href="#method">О методах</a><a href="#sources">Источники</a></nav>
       <a class="nav-action" href="index.html#picker">Подбор точек</a>
     </div>
   </header>
@@ -28,23 +28,57 @@
     <section class="bioage-hero">
       <div class="wrap bioage-hero-grid">
         <div>
-          <p class="eyebrow">Исследовательская модель Levine PhenoAge</p>
-          <h1>Рассчитайте свой <em>фенотипический возраст</em></h1>
-          <p>Введите показатели из свежего анализа крови. Модель сопоставит их с риском, характерным для определённого возраста, и покажет результат в годах.</p>
-          <a class="button primary" href="#calculator">Перейти к расчёту</a>
+          <p class="eyebrow">Два расчёта на выбор</p>
+          <h1>Оцените возрастные показатели <em>с анализами или без</em></h1>
+          <p>Простой вариант использует талию, пульс покоя и обычную активность. Точный PhenoAge остаётся доступен по девяти показателям крови.</p>
+          <div class="bioage-hero-actions"><a class="button primary" href="#simple-calculator">Простой расчёт</a><a class="button bioage-hero-secondary" href="#calculator">PhenoAge по анализам</a></div>
         </div>
         <aside class="bioage-intro-card" aria-label="Что потребуется для расчёта">
-          <span>Для расчёта</span>
-          <strong>Возраст + 9 показателей</strong>
-          <ul><li>Биохимический анализ крови</li><li>Общий анализ крови</li><li>С‑реактивный белок</li></ul>
+          <span>Можно начать сейчас</span>
+          <strong>Без лаборатории</strong>
+          <ul><li>Возраст и пол</li><li>Талия и пульс покоя</li><li>Обычная физическая активность</li></ul>
           <p>Все вычисления выполняются на вашем устройстве.</p>
         </aside>
       </div>
     </section>
 
+    <section class="fitness-calculator" id="simple-calculator" aria-labelledby="fitnessCalculatorTitle">
+      <div class="wrap">
+        <div class="bioage-heading fitness-heading">
+          <div><p class="eyebrow dark">Простой вариант · без анализов</p><h2 id="fitnessCalculatorTitle">Возраст выносливости по тому, что есть под рукой</h2></div>
+          <p>Расчёт HUNT оценивает сердечно‑дыхательную выносливость без нагрузки и лаборатории. Понадобятся сантиметровая лента, часы и две минуты покоя.</p>
+        </div>
+        <div class="fitness-layout">
+          <aside class="fitness-how" aria-label="Как подготовить измерения">
+            <p class="eyebrow dark">Перед заполнением</p>
+            <h3>Два простых измерения</h3>
+            <ol><li><b>Талия:</b> измерьте окружность сантиметровой лентой на уровне пупка, не втягивая живот.</li><li><b>Пульс:</b> спокойно посидите 10 минут, затем считайте удары 30 секунд и умножьте на два.</li></ol>
+            <p>Если пульс сейчас необычный для вас, повторите измерение позже. При боли в груди, одышке, обмороке или выраженном сердцебиении нужен врач, а не калькулятор.</p>
+          </aside>
+          <form id="fitnessAgeForm" class="bioage-form fitness-form" novalidate>
+            <div class="bioage-fields fitness-fields">
+              <label><span>Пол, указанный при рождении</span><select name="sex" required><option value="">Выберите</option><option value="female">Женский</option><option value="male">Мужской</option></select><small>Нужен для сравнения с референсными значениями HUNT.</small></label>
+              <label><span>Возраст <b>лет</b></span><input name="fitnessAgeChronological" type="number" min="20" max="84" step="1" inputmode="numeric" placeholder="Например, 55" required><small>Модель проверена на взрослых.</small></label>
+              <label><span>Окружность талии <b>см</b></span><input name="waist" type="number" min="45" max="180" step="0.1" inputmode="decimal" placeholder="Например, 88" required><small>Лента проходит на уровне пупка.</small></label>
+              <label><span>Пульс в покое <b>уд/мин</b></span><input name="restingHeartRate" type="number" min="35" max="130" step="1" inputmode="numeric" placeholder="Например, 68" required><small>После 10 минут спокойного сидения.</small></label>
+              <label class="fitness-activity"><span>Обычная физическая активность</span><select name="activityIndex" required><option value="">Выберите ближайший вариант</option><option value="0">Почти нет регулярной нагрузки</option><option value="2">1–2 короткие лёгкие тренировки в неделю</option><option value="5">2–3 умеренные тренировки по 30 минут и более</option><option value="8.3">3 и более интенсивные тренировки в неделю</option></select><small>Это упрощённое представление индекса активности HUNT.</small></label>
+            </div>
+            <div class="bioage-actions"><button class="button primary" type="submit">Рассчитать без анализов</button><button class="bioage-clear" type="reset">Очистить</button></div>
+            <p class="bioage-privacy"><span aria-hidden="true">✓</span> Данные остаются только в открытой странице.</p>
+            <p class="bioage-error" id="fitnessAgeError" role="alert" hidden></p>
+          </form>
+        </div>
+        <section class="bioage-result fitness-result" id="fitnessAgeResult" aria-live="polite" hidden>
+          <div class="bioage-result-main"><span>Ориентировочный возраст выносливости</span><strong><b id="fitnessAgeValue">—</b> года</strong><small>по средним значениям HUNT</small></div>
+          <div class="bioage-result-delta"><span>Расчётная выносливость</span><strong><b id="fitnessVo2Value">—</b> мл/кг/мин</strong><p id="fitnessAgeMeaning"></p></div>
+          <p class="bioage-result-note">Это грубая оценка сердечно‑дыхательной формы для здоровых взрослых, а не биологический возраст, диагноз или тест сердца. Погрешность исходной неинвазивной модели составляет около 5–6 мл/кг/мин.</p>
+        </section>
+      </div>
+    </section>
+
     <section class="bioage-calculator wrap" id="calculator" aria-labelledby="calculatorTitle">
       <div class="bioage-heading">
-        <div><p class="eyebrow dark">Калькулятор</p><h2 id="calculatorTitle">Перенесите значения точно из бланка анализа</h2></div>
+        <div><p class="eyebrow dark">Лабораторный вариант · PhenoAge</p><h2 id="calculatorTitle">Перенесите значения точно из бланка анализа</h2></div>
         <p>Проверьте единицы измерения рядом с каждым полем. Для более сопоставимого результата используйте анализы, сданные в один день вне острого заболевания.</p>
       </div>
 
@@ -79,9 +113,10 @@
 
     <section class="bioage-method" id="method">
       <div class="wrap bioage-method-grid">
-        <div><p class="eyebrow dark">Что означает результат</p><h2>Не «износ организма», а возрастной эквивалент набора анализов</h2></div>
+        <div><p class="eyebrow dark">Что означают результаты</p><h2>Два разных ориентира, которые нельзя смешивать</h2></div>
         <div>
           <p>PhenoAge разработан Морган Левин и соавторами на данных взрослых участников NHANES. Девять лабораторных показателей и паспортный возраст объединяются в оценку, связанную с риском смертности в исходной выборке.</p>
+          <p>Возраст выносливости основан на неинвазивной модели HUNT: она приблизительно оценивает VO₂peak по возрасту, полу, талии, пульсу покоя и активности, а затем сравнивает результат со средними значениями людей разного возраста.</p>
           <p>Результат выше паспортного возраста означает, что именно этот набор показателей в модели похож на более старший возраст; результат ниже — на более молодой. Острое воспаление, недавняя нагрузка, питание, лекарства и лабораторный метод могут заметно изменить отдельные показатели.</p>
           <div class="bioage-warning"><strong>Важно:</strong> показатель полезен как ориентир для наблюдения в динамике, но не заменяет оценку врача и интерпретацию каждого анализа.</div>
         </div>
@@ -95,11 +130,13 @@
         <a href="https://pubmed.ncbi.nlm.nih.gov/29676998/" target="_blank" rel="noopener noreferrer"><span>Исходное исследование · 2018</span><strong>Levine et al. — An epigenetic biomarker of aging for lifespan and healthspan</strong><small>Публикация и описание клинического Phenotypic Age.</small></a>
         <a href="https://pubmed.ncbi.nlm.nih.gov/34725754/" target="_blank" rel="noopener noreferrer"><span>Независимый инструментарий · 2021</span><strong>Kwon &amp; Belsky — A toolkit for quantification of biological age</strong><small>Пакет BioAge для воспроизводимого расчёта биологического возраста.</small></a>
         <a href="https://github.com/dayoonkwon/BioAge/blob/master/R/phenoage_calc.R" target="_blank" rel="noopener noreferrer"><span>Открытый исходный код</span><strong>Формула и коэффициенты BioAge</strong><small>Реализация, с которой сверена формула калькулятора.</small></a>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/21502897/" target="_blank" rel="noopener noreferrer"><span>Неинвазивная модель · 2011</span><strong>Nes et al. — HUNT Fitness Study</strong><small>Модель оценки VO₂peak без физического теста, разработанная на данных 4 637 взрослых.</small></a>
+        <a href="https://www.ntnu.edu/cerg/fitness-numbers" target="_blank" rel="noopener noreferrer"><span>Референсные значения HUNT</span><strong>Средняя выносливость по возрасту и полу</strong><small>Таблица NTNU, используемая для ориентировочного возраста выносливости.</small></a>
       </div>
     </section>
   </main>
 
   <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="index.html"><span>Т</span>ТКМ</a><p>Справочный помощник для осознанной заботы о здоровье.</p></div><div class="metrics"><a href="index.html">На главную</a><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a></div></div></footer>
-  <script src="assets/biological-age.js?v=20260829-1" defer></script>
+  <script src="assets/biological-age.js?v=20260830-2" defer></script>
 </body>
 </html>

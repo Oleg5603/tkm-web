@@ -13,6 +13,18 @@ const PHENOAGE_RANGES = Object.freeze({
   wbc: [0.5, 100]
 });
 
+const FITNESS_AGE_RANGES = Object.freeze({
+  fitnessAgeChronological: [20, 84],
+  waist: [45, 180],
+  restingHeartRate: [35, 130],
+  activityIndex: [0, 8.3]
+});
+
+const FITNESS_REFERENCE = Object.freeze({
+  female: Object.freeze([[25, 43], [35, 40], [45, 38], [55, 34], [65, 31], [75, 27]]),
+  male: Object.freeze([[25, 54], [35, 49], [45, 47], [55, 42], [65, 39], [75, 34]])
+});
+
 function calculatePhenoAge(values) {
   const clean = {};
   for (const [name, range] of Object.entries(PHENOAGE_RANGES)) {
@@ -47,8 +59,55 @@ function calculatePhenoAge(values) {
   return { phenoAge, difference: phenoAge - clean.age };
 }
 
+function fitnessAgeFromVo2(sex, vo2) {
+  const points = FITNESS_REFERENCE[sex];
+  if (!points || !Number.isFinite(vo2)) throw new RangeError('Invalid fitness age input');
+
+  if (vo2 >= points[0][1]) {
+    const slope = (points[0][1] - points[1][1]) / 10;
+    return Math.max(18, points[0][0] - (vo2 - points[0][1]) / slope);
+  }
+  const last = points.length - 1;
+  if (vo2 <= points[last][1]) {
+    const slope = (points[last - 1][1] - points[last][1]) / 10;
+    return Math.min(90, points[last][0] + (points[last][1] - vo2) / slope);
+  }
+  for (let index = 0; index < last; index += 1) {
+    const younger = points[index];
+    const older = points[index + 1];
+    if (vo2 <= younger[1] && vo2 >= older[1]) {
+      const fraction = (younger[1] - vo2) / (younger[1] - older[1]);
+      return younger[0] + fraction * (older[0] - younger[0]);
+    }
+  }
+  throw new RangeError('Unable to derive fitness age');
+}
+
+function calculateFitnessAge(values) {
+  const sex = values.sex;
+  if (sex !== 'female' && sex !== 'male') throw new RangeError('Invalid sex value');
+
+  const clean = {};
+  for (const [name, range] of Object.entries(FITNESS_AGE_RANGES)) {
+    const value = Number(values[name]);
+    if (!Number.isFinite(value) || value < range[0] || value > range[1]) {
+      throw new RangeError(`Invalid fitness age value: ${name}`);
+    }
+    clean[name] = value;
+  }
+
+  const { fitnessAgeChronological: age, waist, restingHeartRate: pulse, activityIndex } = clean;
+  const vo2 = sex === 'male'
+    ? 100.27 - 0.296 * age - 0.369 * waist - 0.155 * pulse + 0.226 * activityIndex
+    : 74.74 - 0.247 * age - 0.259 * waist - 0.114 * pulse + 0.198 * activityIndex;
+  if (!Number.isFinite(vo2) || vo2 <= 0) throw new RangeError('Unable to calculate fitness age');
+
+  const fitnessAge = fitnessAgeFromVo2(sex, vo2);
+  return { vo2, fitnessAge, difference: fitnessAge - age };
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { calculatePhenoAge, PHENOAGE_RANGES };
+  module.exports = { calculatePhenoAge, calculateFitnessAge, fitnessAgeFromVo2, PHENOAGE_RANGES, FITNESS_AGE_RANGES };
 }
 
 if (typeof document !== 'undefined') {
@@ -128,5 +187,75 @@ if (typeof document !== 'undefined') {
   form.addEventListener('reset', () => {
     clearValidity();
     result.hidden = true;
+  });
+
+  const fitnessForm = document.getElementById('fitnessAgeForm');
+  const fitnessResult = document.getElementById('fitnessAgeResult');
+  const fitnessError = document.getElementById('fitnessAgeError');
+  const fitnessAgeValue = document.getElementById('fitnessAgeValue');
+  const fitnessVo2Value = document.getElementById('fitnessVo2Value');
+  const fitnessMeaning = document.getElementById('fitnessAgeMeaning');
+  const fitnessLabels = {
+    fitnessAgeChronological: 'Укажите возраст от 20 до 84 лет',
+    waist: 'Проверьте окружность талии в сантиметрах',
+    restingHeartRate: 'Проверьте пульс покоя',
+    activityIndex: 'Выберите обычный уровень активности'
+  };
+
+  function clearFitnessValidity() {
+    fitnessForm.querySelectorAll('input, select').forEach(control => control.removeAttribute('aria-invalid'));
+    fitnessError.hidden = true;
+  }
+
+  fitnessForm.addEventListener('submit', event => {
+    event.preventDefault();
+    clearFitnessValidity();
+    const values = Object.fromEntries(new FormData(fitnessForm).entries());
+    if (values.sex !== 'female' && values.sex !== 'male') {
+      fitnessForm.elements.sex.setAttribute('aria-invalid', 'true');
+      fitnessError.textContent = 'Выберите пол, указанный при рождении.';
+      fitnessError.hidden = false;
+      fitnessForm.elements.sex.focus();
+      fitnessResult.hidden = true;
+      return;
+    }
+    const invalid = Object.entries(FITNESS_AGE_RANGES).find(([name, [min, max]]) => {
+      const value = Number(values[name]);
+      return values[name] === '' || !Number.isFinite(value) || value < min || value > max;
+    });
+    if (invalid) {
+      const control = fitnessForm.elements[invalid[0]];
+      control.setAttribute('aria-invalid', 'true');
+      fitnessError.textContent = `${fitnessLabels[invalid[0]]}. Допустимый диапазон: ${invalid[1][0]}–${invalid[1][1]}.`;
+      fitnessError.hidden = false;
+      control.focus();
+      fitnessResult.hidden = true;
+      return;
+    }
+
+    try {
+      const calculated = calculateFitnessAge(values);
+      fitnessAgeValue.textContent = calculated.fitnessAge.toFixed(1).replace('.', ',');
+      fitnessVo2Value.textContent = calculated.vo2.toFixed(1).replace('.', ',');
+      const years = Math.abs(calculated.difference).toFixed(1).replace('.', ',');
+      if (Math.abs(calculated.difference) < 1) {
+        fitnessMeaning.textContent = 'Расчёт близок к средней выносливости для вашего возраста.';
+      } else if (calculated.difference > 0) {
+        fitnessMeaning.textContent = `Ориентировочно на ${years} года старше паспортного возраста. Это повод обратить внимание на посильную регулярную активность, а не медицинский диагноз.`;
+      } else {
+        fitnessMeaning.textContent = `Ориентировочно на ${years} года моложе паспортного возраста по уровню выносливости.`;
+      }
+      fitnessResult.hidden = false;
+      fitnessResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {
+      fitnessError.textContent = 'Не удалось выполнить расчёт. Проверьте введённые значения.';
+      fitnessError.hidden = false;
+      fitnessResult.hidden = true;
+    }
+  });
+
+  fitnessForm.addEventListener('reset', () => {
+    clearFitnessValidity();
+    fitnessResult.hidden = true;
   });
 }

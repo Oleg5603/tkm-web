@@ -41,7 +41,7 @@ assert.match(html, /Подбирайте точки без подписки/);
 assert.match(html, /Загружаем справочные данные/);
 assert.match(html, /assets\/app\.js\?v=20260830-1/);
 assert.match(html, /href="biological-age\.html"/);
-assert.match(html, /Научный расчёт PhenoAge/);
+assert.match(html, /простой расчёт без лаборатории/);
 assert.match(html, /Быстрее разобраться/);
 assert.match(app, /const gavrikAnswers=/);
 assert.doesNotMatch(app, /Публичный расчёт закрыт/);
@@ -82,7 +82,7 @@ for (const page of [html, validation, topics]) {
   assert.match(page, /assets\/accessibility\.css/);
 }
 assert.match(privacy, /Конфиденциальность/);
-assert.match(privacy, /Показатели калькулятора PhenoAge обрабатываются локально, не сохраняются/);
+assert.match(privacy, /Показатели PhenoAge и простого расчёта выносливости обрабатываются локально, не сохраняются/);
 assert.match(terms, /Условия использования/);
 assert.match(terms, /исследовательскую оценку фенотипического возраста/);
 assert.match(terms, /публичный расчёт формирует справочный список/);
@@ -141,9 +141,16 @@ assert.match(bioage, /Значения не сохраняются и не от�
 assert.match(bioage, /pubmed\.ncbi\.nlm\.nih\.gov\/29676998/);
 assert.match(bioage, /pubmed\.ncbi\.nlm\.nih\.gov\/34725754/);
 assert.equal((bioage.match(/name="(?:age|albumin|creatinine|glucose|crp|lymphocytes|mcv|rdw|alp|wbc)"/g) || []).length, 10, 'Для PhenoAge нужны возраст и девять показателей');
+assert.match(bioage, /id="fitnessAgeForm"/);
+assert.match(bioage, /id="fitnessAgeResult"/);
+assert.equal((bioage.match(/name="(?:sex|fitnessAgeChronological|waist|restingHeartRate|activityIndex)"/g) || []).length, 5, 'Для простого расчёта нужны пять доступных параметров');
+assert.match(bioage, /pubmed\.ncbi\.nlm\.nih\.gov\/21502897/);
 assert.match(bioageJs, /Math\.log\(clean\.crp \/ 10\)/);
 assert.match(bioageJs, /-19\.90667/);
 assert.match(bioageJs, /0\.08035356 \* clean\.age/);
+assert.match(bioageJs, /100\.27 - 0\.296 \* age/);
+assert.match(bioageJs, /74\.74 - 0\.247 \* age/);
+assert.match(fs.readFileSync('assets/biological-age.css', 'utf8'), /\.bioage-result\[hidden\]\{display:none\}/);
 assert.match(css, /\.landing-page \.doctor-about\{order:8\}/);
 
 const requiredAtlasImages = ['arm-inner','hand-back','leg-inner','foot-top','arm-outer','leg-front','knee-side','foot-side'];
