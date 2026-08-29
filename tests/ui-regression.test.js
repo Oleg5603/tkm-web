@@ -39,7 +39,7 @@ assert.doesNotMatch(html, /class="body-map"/);
 assert.match(html, /Защищённая подписка будет подключена через некоторое время/);
 assert.match(html, /Подбирайте точки без подписки/);
 assert.match(html, /Загружаем справочные данные/);
-assert.match(html, /assets\/app\.js\?v=20260830-2/);
+assert.match(html, /assets\/app\.js\?v=20260830-3/);
 assert.match(html, /href="biological-age\.html"/);
 assert.match(html, /простой расчёт без лаборатории/);
 assert.match(html, /Быстрее разобраться/);
@@ -119,12 +119,12 @@ const auditedAtlasPairs = {
   GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
-  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',RP8:'leg-inner',
+  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',R7:'leg-inner',RP8:'leg-inner',
   TR3:'hand-back',V63:'foot-side',V65:'foot-side',V67:'foot-side',
   VB36:'leg-front',VB43:'foot-top'
 };
 for (const [code,image] of Object.entries(auditedAtlasPairs)) assert.match(app, new RegExp(`${code}:'${image.replace('.', '\\.')}'`));
-for (const unsupported of ['E34','F6','R1','R5','R7','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
+for (const unsupported of ['E34','F6','R1','R5','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="reviewState"/);
 assert.match(validation, /Проверка завершена/);
