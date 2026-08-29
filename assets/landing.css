@@ -2,6 +2,22 @@
   padding: 100px 0 30px;
 }
 
+.hero-actions {
+  flex-wrap: wrap;
+}
+
+.button.sales-cta {
+  color: #17322d;
+  border: 1px solid #f1cf93;
+  background: #f6dfb2;
+  box-shadow: 0 10px 28px #071c1b33;
+}
+
+.button.sales-cta:hover,
+.button.sales-cta:focus-visible {
+  background: #ffe8bc;
+}
+
 .benefits-heading {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -549,6 +565,8 @@
 .gavrik-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 42px; align-items: center; }
 .gavrik-grid h2 { margin: 5px 0 8px; font-size: clamp(1.45rem, 3vw, 2.35rem); }
 .gavrik-grid p { margin: 0; color: #dcebe6; }
+.gavrik-sales-link { display: inline-block; margin-top: 13px; color: #f5d788; font-weight: 800; text-underline-offset: 4px; }
+.gavrik-sales-link:hover, .gavrik-sales-link:focus-visible { color: #ffe9b3; }
 .gavrik-form { display: grid; gap: 8px; padding: 18px; border: 1px solid #ffffff2e; border-radius: 18px; background: #ffffff12; }
 .gavrik-form label { font-size: .8rem; font-weight: 800; }
 .gavrik-form > div { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
