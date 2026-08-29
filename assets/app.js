@@ -103,8 +103,8 @@ const pointAtlas={
 };
 
 const atlasRotation={
-  'arm-inner':'rotate-neg-90','foot-side':'rotate-180','foot-top':'rotate-neg-90',
-  'knee-side':'rotate-neg-90','leg-front':'rotate-neg-90'
+  'arm-inner':'rotate-90','foot-side':'rotate-180','foot-top':'rotate-90',
+  'knee-side':'rotate-90','leg-front':'rotate-90'
 };
 
 function atlasPhoto(code){

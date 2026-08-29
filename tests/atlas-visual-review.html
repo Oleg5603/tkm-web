@@ -9,6 +9,7 @@
     body { margin: 0; padding: 28px; background: #f4f0e7; }
     h1 { margin: 0 0 24px; font: 34px/1.1 Georgia, serif; }
     .atlas-review { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .atlas-review > article { min-width: 0; }
     .protocol-card { min-height: 230px; }
     @media (max-width: 900px) { .atlas-review { grid-template-columns: 1fr; } }
   </style>
@@ -18,18 +19,30 @@
   <main class="atlas-review" id="atlasReview"></main>
   <script>
     const cards = [
-      ['C6','arm-inner.webp','rotate-neg-90'],['C7','arm-inner.webp','rotate-neg-90'],['C9','hand-back.webp',''],
-      ['E41','foot-top.webp','rotate-neg-90'],['E45','foot-top.webp','rotate-neg-90'],['F2','foot-top.webp','rotate-neg-90'],
+      ['C6','arm-inner.webp','rotate-90'],['C7','arm-inner.webp','rotate-90'],['C9','hand-back.webp',''],
+      ['E41','foot-top.webp','rotate-90'],['E45','foot-top.webp','rotate-90'],['F2','foot-top.webp','rotate-90'],
       ['F8','leg-inner.webp',''],['GI11','arm-outer.webp',''],['GI2','hand-back.webp',''],['GI7','hand-back.webp',''],
-      ['IG3','hand-back.webp',''],['IG6','hand-back.webp',''],['IG8','arm-outer.webp',''],['MC4','arm-inner.webp','rotate-neg-90'],
-      ['MC7','arm-inner.webp','rotate-neg-90'],['MC9','hand-back.webp',''],['P5','arm-inner.webp','rotate-neg-90'],
-      ['P6','arm-inner.webp','rotate-neg-90'],['P9','p9-wrist.png','scale-85'],['RP8','leg-inner.webp',''],
+      ['IG3','hand-back.webp',''],['IG6','hand-back.webp',''],['IG8','arm-outer.webp',''],['MC4','arm-inner.webp','rotate-90'],
+      ['MC7','arm-inner.webp','rotate-90'],['MC9','hand-back.webp',''],['P5','arm-inner.webp','rotate-90'],
+      ['P6','arm-inner.webp','rotate-90'],['P9','p9-wrist.png','scale-85'],['RP8','leg-inner.webp',''],
       ['TR3','hand-back.webp',''],['V63','foot-side.webp','rotate-180'],['V65','foot-side.webp','rotate-180'],
-      ['V67','foot-side.webp','rotate-180'],['VB36','leg-front.webp','rotate-neg-90'],['VB43','foot-top.webp','rotate-neg-90']
+      ['V67','foot-side.webp','rotate-180'],['VB36','leg-front.webp','rotate-90'],['VB43','foot-top.webp','rotate-90']
     ];
-    document.querySelector('#atlasReview').innerHTML = cards.map(([code,image,orientation],index) => `
-      <article class="protocol-card">
-        <div class="protocol-number">${String(index + 1).padStart(2,'0')}</div>
+    const detailCards = [
+      ['arm-inner','arm-inner.webp','rotate-90'],['arm-outer','arm-outer.webp',''],
+      ['foot-side','foot-side.webp','rotate-180'],['foot-top','foot-top.webp','rotate-90'],
+      ['hand-back','hand-back.webp',''],['knee-side','knee-side.webp','rotate-90'],
+      ['leg-front','leg-front.webp','rotate-90'],['leg-inner','leg-inner.webp',''],
+      ['P9','p9-wrist.png','scale-85']
+    ];
+    const params = new URLSearchParams(location.search);
+    const detail = params.has('detail');
+    const start = Number(params.get('start') || 0);
+    const reviewCards = (detail ? detailCards : cards).slice(start);
+    document.querySelector('#atlasReview').innerHTML = reviewCards.map(([code,image,orientation],index) => detail ? `
+      <article><h2>${code}</h2><div class="detail-image-frame"><img class="detail-image ${orientation}" src="../assets/point-atlas/${image}" alt="${code}"><strong class="point-focus-label">${code}</strong></div></article>` : `
+      <article class="protocol-card" id="point-${code}">
+        <div class="protocol-number">${String(index + start + 1).padStart(2,'0')}</div>
         <div class="point-image"><img class="${orientation}" src="../assets/point-atlas/${image}" alt="${code}"><strong class="point-focus-label">${code}</strong></div>
         <div class="protocol-body"><span>Проверяемая схема</span><h3>${code}</h3><p>Нужная метка должна быть видна на фотографии.</p></div>
       </article>`).join('');
