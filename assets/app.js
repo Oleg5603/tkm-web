@@ -97,15 +97,15 @@ const pointAtlas={
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
   P5:'arm-inner',P6:'arm-inner',P9:'arm-inner',
-  RP8:'leg-inner',
+  R7:'leg-inner',RP8:'leg-inner',
   TR3:'hand-back',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
   VB36:'leg-front',VB43:'foot-top'
 };
 
 const atlasRotation={
-  'arm-inner':'rotate-90','foot-side':'rotate-180','foot-top':'rotate-90',
-  'knee-side':'rotate-90','leg-front':'rotate-90'
+  'arm-inner':'rotate-neg-90','foot-side':'rotate-180','foot-top':'rotate-neg-90',
+  'knee-side':'rotate-neg-90','leg-front':'rotate-neg-90'
 };
 
 function atlasPhoto(code){
