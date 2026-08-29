@@ -139,7 +139,7 @@
             <label><span>Количество точек</span><select id="pointLimit"><option value="5">5 точек</option><option value="7">7 точек</option><option value="9">9 точек</option><option value="all">Все релевантные</option></select></label>
             <label class="acute-check danger-check"><input id="redFlags" type="checkbox"><span><b>Есть тревожные симптомы</b><small>Сильная или внезапная боль, кровотечение, боль в груди, одышка, слабость/онемение одной стороны, нарушение речи или сознания</small></span></label>
             <button id="calculateProtocol" class="button primary calculate" type="button" disabled>Загрузка данных…</button>
-            <p id="engineStatus" role="status">Публичный расчёт временно закрыт до завершения экспертной проверки. Данные загружаются локально и никуда не отправляются.</p>
+            <p id="engineStatus" role="status">Загружаем справочные данные. Они обрабатываются локально и никуда не отправляются.</p>
           </aside>
         </div>
 
@@ -160,7 +160,7 @@
       </div>
     </section>
 
-    <section class="payment-section" id="payment"><div class="wrap payment-grid"><div><p class="eyebrow dark">Подготовка запуска</p><h2>Подписка появится после экспертной проверки</h2><p>Сейчас сайт не собирает имя, email или телефон и не принимает оплату. Защищённая подписка будет подключена через некоторое время — вместе с серверной авторизацией, политикой конфиденциальности и платёжным кабинетом.</p></div><div class="payment-form"><strong>Что должно быть готово</strong><p>Экспертное подтверждение алгоритма, проверенные фотографии точек, серверный учёт доступа и безопасная оплата.</p><a class="button secondary" href="validation.html">Открыть экспертную проверку</a></div></div></section>
+    <section class="payment-section" id="payment"><div class="wrap payment-grid"><div><p class="eyebrow dark">Расчёт уже открыт</p><h2>Подбирайте точки без подписки</h2><p>Сейчас справочный расчёт доступен бесплатно, без регистрации и оплаты. Защищённая подписка будет подключена через некоторое время — вместе с серверной авторизацией, политикой конфиденциальности и платёжным кабинетом.</p></div><div class="payment-form"><strong>Что готовится дальше</strong><p>Продолжаются экспертная проверка алгоритма и фотографий точек, а также подготовка серверного учёта доступа и безопасной оплаты.</p><a class="button secondary" href="validation.html">Посмотреть экспертную проверку</a></div></div></section>
 
     <section class="about wrap">
       <div><p class="eyebrow dark">О приложении</p><h2>Помогает увидеть картину, но не ставит диагноз</h2></div>
@@ -175,11 +175,11 @@
     <section class="safety wrap" role="note"><span>i</span><div><strong>Важно знать</strong><p>Не выполняйте иглоукалывание и другие инвазивные процедуры самостоятельно. При боли, ухудшении состояния или тревожных симптомах обратитесь к врачу. Фактический результат индивидуален и не гарантируется.</p></div></section>
   </main>
 
-  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="#top"><span>Т</span>ТКМ</a><p>Справочный помощник для экспертной проверки.</p></div><div class="metrics"><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a><span>Время знакомства: <b id="sessionTime">00:00</b></span></div></div></footer>
+  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="#top"><span>Т</span>ТКМ</a><p>Справочный помощник для подбора и проверки точек.</p></div><div class="metrics"><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a><span>Время знакомства: <b id="sessionTime">00:00</b></span></div></div></footer>
 
   <dialog id="detailDialog" class="dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><div id="dialogContent"></div></dialog>
   <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать список</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
   <script src="assets/protocol-utils.js?v=20260826-1" defer></script>
-  <script src="assets/app.js?v=20260826-1" defer></script>
+  <script src="assets/app.js?v=20260830-1" defer></script>
 </body>
 </html>

@@ -9,7 +9,6 @@ function requireSafeContext(){
   if($('#redFlags').checked||TkmProtocolUtils.hasUrgent([...state.selected,...state.diagnoses])){
     alert('При тревожных или острых симптомах расчёт точек не выполняется. Обратитесь за медицинской помощью; при угрозе жизни вызовите экстренную службу.');return false;
   }
-  if(!reviewMode){alert('Публичный расчёт закрыт до завершения экспертной проверки алгоритма.');return false}
   return true;
 }
 function pointVisual(point){
@@ -232,9 +231,9 @@ const started=Date.now();setInterval(()=>{const seconds=Math.floor((Date.now()-s
 Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url=>fetch(url).then(response=>{if(!response.ok)throw new Error(`Engine HTTP ${response.status}`);return response.json()})))
   .then(([engine,diagnoses])=>{
     state.engine={...engine,diagnoses};state.symptomIndex=buildSearchIndex(engine.symptoms);state.diagnosisIndex=buildSearchIndex(diagnoses);renderSelected();renderSelectedDiagnosis();
-    $('#calculateProtocol').disabled=!reviewMode;
-    $('#calculateProtocol').textContent=reviewMode?'Сформировать список точек':'Расчёт ожидает экспертной проверки';
-    $('#engineStatus').textContent=reviewMode?'Экспертный режим: список ещё не прошёл проверку и не является назначением.':'Публичный расчёт временно закрыт до завершения экспертной проверки.';
+    $('#calculateProtocol').disabled=false;
+    $('#calculateProtocol').textContent=reviewMode?'Сформировать экспертный список':'Рассчитать список точек';
+    $('#engineStatus').textContent=reviewMode?'Экспертный режим: проверьте логику, точки и противопоказания.':'Справочный расчёт доступен. Результат не является диагнозом или назначением; перепроверьте точки и противопоказания.';
   })
   .catch(()=>{
     const message='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';
