@@ -512,6 +512,82 @@
   font-size: .75rem;
 }
 
+.picker-stories {
+  margin-top: 34px;
+  padding: 30px;
+  border: 1px solid #cddbd5;
+  border-radius: 22px;
+  background: #f6faf8;
+}
+
+.picker-stories-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .72fr);
+  gap: 32px;
+  align-items: end;
+}
+
+.picker-stories-heading h3 {
+  margin: .18em 0 0;
+  font-size: clamp(1.75rem, 3vw, 2.65rem);
+  line-height: 1.08;
+}
+
+.picker-stories-heading > p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.picker-stories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 25px;
+}
+
+.picker-story-card {
+  position: relative;
+  min-width: 0;
+  padding: 28px 22px 22px;
+  border: 1px solid #d6e2dd;
+  border-radius: 17px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.picker-story-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 92px;
+  height: 6px;
+  background: radial-gradient(circle at 6px 3px, #d6a94c 0 3px, transparent 3.5px), linear-gradient(90deg, #d6a94c 6px 74px, transparent 74px);
+}
+
+.picker-story-card > span {
+  color: #4b7568;
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.picker-story-card p {
+  margin: 18px 0 22px;
+  color: #28443b;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.picker-story-card .picker-story-author {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.45;
+}
+
 @media (max-width: 850px) {
   .benefits-heading {
     grid-template-columns: 1fr;
@@ -526,9 +602,13 @@
 
   .calculator,
   .protocol-grid,
-  .payment-grid {
+  .payment-grid,
+  .picker-stories-grid,
+  .picker-stories-heading {
     grid-template-columns: 1fr;
   }
+
+  .picker-stories-heading { gap: 12px; }
 
   .priority-summary {
     grid-template-columns: 1fr 1fr;
@@ -559,6 +639,8 @@
     width: 100%;
     min-height: 250px;
   }
+
+  .picker-stories { padding: 24px 18px; }
 }
 
 .gavrik-bar { padding: 34px 0; color: #fff; background: linear-gradient(115deg, #123d36, #1f6658); }
