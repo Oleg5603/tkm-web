@@ -1,0 +1,114 @@
+/* Wide desktop layout for the data-heavy sections. */
+.wrap {
+  width: min(1360px, calc(100% - 48px));
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+.gavrik-bar-top {
+  padding-top: 112px;
+}
+
+.hero-copy,
+.benefits-heading,
+.topic-preview-heading,
+.picker-heading {
+  min-width: 0;
+}
+
+.topic {
+  display: block;
+}
+
+.topic.wrap,
+.topic-inner {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.topic-content {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.topic-lead {
+  max-width: 980px;
+}
+
+.facts,
+.movement-plan {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.method-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.facts article,
+.method-grid article,
+.movement-plan article {
+  padding: 26px;
+}
+
+@media (max-width: 850px) {
+  .topic.wrap,
+  .topic-inner,
+  .facts,
+  .movement-plan {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .wrap {
+    width: auto !important;
+    max-width: none !important;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .gavrik-grid,
+  .gavrik-grid > *,
+  .gavrik-form,
+  .gavrik-form > div,
+  .hero-grid,
+  .hero-grid > *,
+  .hero-copy {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .gavrik-grid h2,
+  .gavrik-grid p,
+  .gavrik-form input {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .method-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gavrik-bar-top {
+    padding-top: 92px;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.25rem, 12vw, 3rem);
+    overflow-wrap: anywhere;
+  }
+
+  .hero .lead,
+  .hero .eyebrow {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}

@@ -238,3 +238,18 @@ Promise.all(['assets/tkm-engine-data.json','assets/diagnoses-data.json'].map(url
     const message='<small>Не удалось загрузить расчётные данные. Обновите страницу.</small>';
     $('#symptomSuggestions').innerHTML=message;$('#diagnosisSuggestions').innerHTML=message;$('#engineStatus').textContent='Ошибка загрузки данных.';$('#calculateProtocol').disabled=true;
   });
+
+const gavrikForm=document.querySelector('#gavrikForm');
+const gavrikAnswers=[
+  [/питан|малахов/i,'В разделе «Материалы» собраны принципы системы Татьяны Малаховой и общие ориентиры здорового питания. Индивидуальные ограничения лучше согласовать с врачом.'],
+  [/точк|меридиан|протокол/i,'Выберите жалобу или диагноз в приложении. ТКМ ранжирует связанные меридианы, предлагает предварительный список точек и объясняет логику выбора. Результат обязательно проверяет специалист.'],
+  [/диагноз/i,'Диагноз устанавливает врач. На сайте диагноз используется только как исходное условие для справочного расчёта, а не как медицинское заключение.'],
+  [/боль|сроч|ухудш|температур/i,'При выраженной боли, резком ухудшении или тревожных симптомах не полагайтесь на сайт — обратитесь за очной медицинской помощью.'],
+  [/кто|автор|олег|врач/i,'Автор проекта — Олег Палкин, врач, выпускник ПГМИ; специализация: рефлексотерапия и детская неврология.'],
+];
+gavrikForm?.addEventListener('submit',event=>{
+  event.preventDefault();
+  const question=document.querySelector('#gavrikQuestion').value.trim();
+  const found=gavrikAnswers.find(([pattern])=>pattern.test(question));
+  document.querySelector('#gavrikAnswer').textContent=found?found[1]:'Я пока отвечаю по материалам этого сайта. Уточните, пожалуйста: вас интересуют точки, меридианы, диагноз, питание по Малаховой или безопасность применения?';
+});

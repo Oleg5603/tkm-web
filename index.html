@@ -10,6 +10,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="assets/styles.css?v=20260825-1">
   <link rel="stylesheet" href="assets/landing.css?v=20260825-1">
+  <link rel="stylesheet" href="assets/layout-wide.css?v=20260829-3">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
 </head>
 <body class="landing-page">
@@ -18,9 +19,11 @@
     <div class="wrap nav">
       <a class="brand" href="#top" aria-label="ТКМ — на главную"><span>Т</span>ТКМ</a>
       <nav aria-label="Основная навигация">
+        <a href="#ask-gavrik">Спросить Гаврика</a>
         <a href="#how">Как работает</a>
         <a href="#picker">Подбор точек</a>
         <a href="topics.html">Материалы</a>
+        <a href="#about-me">Обо мне</a>
         <a href="validation.html">Экспертная проверка</a>
       </nav>
       <a class="nav-action" href="#picker">Начать подбор</a>
@@ -29,6 +32,16 @@
 
   <main id="mainContent">
     <span id="top" aria-hidden="true"></span>
+    <section class="gavrik-bar gavrik-bar-top" id="ask-gavrik" aria-labelledby="gavrikTitle">
+      <div class="wrap gavrik-grid">
+        <div><p class="eyebrow">Гаврик отвечает</p><h2 id="gavrikTitle">Задайте вопрос о ТКМ, точках или питании</h2><p>Краткий справочный ответ по материалам сайта. Это не диагноз и не назначение лечения.</p></div>
+        <form class="gavrik-form" id="gavrikForm">
+          <label for="gavrikQuestion">Ваш вопрос</label>
+          <div><input id="gavrikQuestion" maxlength="500" required placeholder="Например: как формируется список точек?"><button type="submit">Спросить</button></div>
+          <p id="gavrikAnswer" class="gavrik-answer" aria-live="polite">Гаврик готов ответить.</p>
+        </form>
+      </div>
+    </section>
     <section class="hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
@@ -133,6 +146,11 @@
     <section class="about wrap">
       <div><p class="eyebrow dark">О приложении</p><h2>Помощник, а не самостоятельный врач</h2></div>
       <div class="about-copy"><p>ТКМ систематизирует жалобы, определяет приоритетные меридианы и готовит объяснимый предварительный протокол. Каждую предложенную точку сопровождает логика выбора; точная локализация добавляется только после проверки источника и лицензии.</p><p>Приложение не ставит диагноз и не назначает лечение: результат проверяет квалифицированный специалист.</p></div>
+    </section>
+
+    <section class="doctor-about wrap" id="about-me" aria-labelledby="doctorAboutTitle">
+      <img src="assets/oleg-palkin.jpg" alt="Олег Палкин, врач" width="520" height="780">
+      <div><p class="eyebrow dark">Обо мне</p><h2 id="doctorAboutTitle">Олег Палкин</h2><p class="doctor-lead">Врач, выпускник ПГМИ.</p><p>Специализация: рефлексотерапия и детская неврология. Создаю понятные цифровые инструменты, которые помогают систематизировать сведения и подготовить материал для профессиональной проверки.</p></div>
     </section>
 
     <section class="safety wrap" role="note"><span>i</span><div><strong>Важно знать</strong><p>Не выполняйте иглоукалывание и другие инвазивные процедуры самостоятельно. При боли, ухудшении состояния или тревожных симптомах обратитесь к врачу. Фактический результат индивидуален и не гарантируется.</p></div></section>
