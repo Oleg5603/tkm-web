@@ -64,7 +64,7 @@ for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(
 assert.match(topics, /Система Татьяны Малаховой/);
 assert.match(topics, /assets\/malakhova\/daily-rhythm\.jpg/);
 assert.match(topics, /assets\/malakhova\/meal-planning\.jpg/);
-assert.match(topics, /assets\/topics\.css\?v=20260830-4/);
+assert.match(topics, /assets\/topics\.css\?v=20260830-5/);
 assert.match(topicsCss, /\.topic-visual,\.nutrition-visual\{width:70%/);
 assert.match(topicsCss, /\.nutrition-calculator-intro img\{height:224px\}/);
 assert.match(topicsCss, /aspect-ratio:1\.9\/1/);
