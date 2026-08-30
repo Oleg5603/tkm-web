@@ -64,7 +64,7 @@ for (const id of ['tcm','methods','water','nutrition','movement']) assert.match(
 assert.match(topics, /Система Татьяны Малаховой/);
 assert.match(topics, /assets\/malakhova\/daily-rhythm\.jpg/);
 assert.match(topics, /assets\/malakhova\/meal-planning\.jpg/);
-assert.match(topics, /assets\/topics\.css\?v=20260830-5/);
+assert.match(topics, /assets\/topics\.css\?v=20260830-6/);
 assert.match(topicsCss, /\.topic-visual,\.nutrition-visual\{width:70%/);
 assert.match(topicsCss, /\.nutrition-calculator-intro img\{height:224px\}/);
 assert.match(topicsCss, /aspect-ratio:1\.9\/1/);
@@ -113,6 +113,8 @@ assert.match(topicsCss, /\.review-invite\[hidden\]\{display:none!important\}/);
 assert.match(topics, /Три занятия в неделю/);
 assert.match(topics, /150–300 минут/);
 for (const method of ['Акупрессура','Электропунктура по методу Леднёва','Шарики, семена','Лазерное воздействие','Воздействие полынной сигарой']) assert.match(topics, new RegExp(method));
+assert.match(topics, /href="https:\/\/www\.eledia\.ru\/"[^>]*>Перейти на сайт «Эледиа»<\/a>/);
+assert.match(topics, /библиотека книг по акупунктуре/);
 for (const page of [html, validation, topics]) {
   assert.match(page, /class="skip-link" href="#mainContent"/);
   assert.match(page, /id="mainContent"/);
