@@ -823,3 +823,7 @@
   .gavrik-question-row > button { min-height: 46px; }
   .doctor-about img { max-width: 320px; }
 }
+
+/* Keep the complete portrait instead of cropping it into a short landscape frame. */
+.doctor-about img { width: min(100%, 300px); height: auto; max-height: none; aspect-ratio: 2/3; object-fit: cover; object-position: center; justify-self: center; }
+@media (max-width: 760px) { .doctor-about img { width: min(100%, 320px); max-width: 320px; height: auto; } }
