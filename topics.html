@@ -10,7 +10,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/landing.css?v=20260821-1">
-  <link rel="stylesheet" href="assets/topics.css?v=20260830-3">
+  <link rel="stylesheet" href="assets/topics.css?v=20260830-4">
   <link rel="stylesheet" href="assets/layout-wide.css?v=20260829-3">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
 </head>
@@ -87,13 +87,14 @@
       </figure>
       <div class="facts"><article><h3>Начните с простого</h3><p>Планируйте основные приёмы пищи, ешьте без спешки и чаще выбирайте продукты с минимальной обработкой.</p></article><article><h3>Сохраняйте баланс</h3><p>Рацион должен оставаться разнообразным и давать достаточно энергии и питательных веществ.</p></article><article><h3>Обсудите ограничения с врачом</h3><p>При диабете, заболеваниях ЖКТ или почек, беременности и расстройствах пищевого поведения обсудите рацион с врачом или диетологом.</p></article></div>
       <div class="recommendation nutrition-calculator">
-        <div class="nutrition-calculator-intro"><div><p class="eyebrow dark">Попробуйте на практике</p><h3>Соберите пример дневного рациона</h3><p>Выберите один из 18 примеров, а затем замените крупу, овощи, белковую часть или дополнение внутри блюда. Итог дня обновится автоматически.</p></div><img src="assets/malakhova/meal-planning.jpg" alt="Планирование трёх приёмов пищи в ежедневнике" width="1400" height="1050" loading="lazy"></div>
+        <div class="nutrition-calculator-intro"><div><p class="eyebrow dark">Попробуйте на практике</p><h3>Соберите пример дневного рациона</h3><p>Выберите один из 30 примеров, а затем замените крупу, рис, макаронные изделия, овощи, белковую часть, авокадо или другое дополнение. Итог дня и предупреждения о высоком ГИ обновятся автоматически.</p></div><img src="assets/malakhova/meal-planning.jpg" alt="Планирование трёх приёмов пищи в ежедневнике" width="1400" height="1050" loading="lazy"></div>
         <div class="meal-grid">
           <article class="meal-card"><label class="meal-template"><span>Завтрак</span><select data-meal="breakfast" aria-label="Выберите пример завтрака"></select></label><small data-meal-note="breakfast"></small><div class="meal-components" data-meal-components="breakfast"></div></article>
           <article class="meal-card"><label class="meal-template"><span>Обед</span><select data-meal="lunch" aria-label="Выберите пример обеда"></select></label><small data-meal-note="lunch"></small><div class="meal-components" data-meal-components="lunch"></div></article>
           <article class="meal-card"><label class="meal-template"><span>Ужин</span><select data-meal="dinner" aria-label="Выберите пример ужина"></select></label><small data-meal-note="dinner"></small><div class="meal-components" data-meal-components="dinner"></div></article>
         </div>
         <div class="meal-result" id="mealSummary" aria-live="polite"></div>
+        <div class="product-catalog"><div><p class="eyebrow dark">Расширенный каталог</p><h4>Продукты для замен внутри рациона</h4><p>Это не закрытый список «разрешено/запрещено»: в авторской системе выбор шире и зависит от сочетания, количества и цели. Здесь собраны практичные группы для конструктора.</p></div><div id="productCatalog"></div></div>
         <p class="calculator-note">Это ориентир для планирования, а не расчёт калорий или лечебной диеты. Калькулятор не учитывает аллергии, лекарства и заболевания; индивидуальные ограничения согласуйте с врачом или диетологом.</p>
         <div class="review-invite" id="reviewInvite" hidden aria-live="polite"><div><b>Спасибо, что попробовали калькулятор.</b><span>Удалось ли быстро собрать понятный пример рациона?</span></div><a href="reviews.html?topic=malakhova&amp;source=meal-calculator">Поделиться впечатлением →</a></div>
       </div>
@@ -129,6 +130,6 @@
   </main>
 
   <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="index.html"><span>Т</span>ТКМ</a><p>Справочные материалы для осознанного выбора.</p></div><div><a class="footer-return" href="privacy.html">Конфиденциальность</a> · <a class="footer-return" href="terms.html">Условия</a></div></div></footer>
-  <script src="assets/nutrition-calculator.js?v=20260830-2"></script>
+  <script src="assets/nutrition-calculator.js?v=20260830-3"></script>
 </body>
 </html>
