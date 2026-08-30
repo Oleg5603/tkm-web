@@ -28,3 +28,10 @@
 @media(max-width:560px){.meal-components{grid-template-columns:1fr}.meal-components label{grid-template-columns:minmax(95px,.75fr) minmax(0,1.25fr)}}
 @media(max-width:850px){.site-header .nav{gap:14px}.site-header .nav nav{display:flex;flex:1;justify-content:flex-end;gap:14px;overflow-x:auto;font-size:.82rem;scrollbar-width:none}.site-header .nav nav::-webkit-scrollbar{display:none}.site-header .nav-action{display:none}}
 @media(max-width:560px){.site-header .nav{height:96px;align-items:flex-start;padding-top:18px}.site-header .nav nav{position:absolute;inset:60px 12px auto;justify-content:center}.site-header .nav nav a:nth-child(2){display:none}}
+
+/* Designer sizing pass: reduce editorial imagery without shrinking mobile captions. */
+.topic-visual,.nutrition-visual{width:70%;margin-left:auto;margin-right:auto}
+.topic-visual img{height:210px}
+.nutrition-calculator-intro img{height:224px}
+@media(max-width:850px){.topic-visual,.nutrition-visual{width:85%}.topic-visual img{height:196px}.nutrition-visual img{aspect-ratio:1.88/1}.nutrition-calculator-intro img{height:210px}}
+@media(max-width:560px){.topic-visual,.nutrition-visual{width:100%}.topic-visual img{height:196px}.nutrition-visual img{aspect-ratio:1.9/1}.nutrition-calculator-intro img{height:168px}}
