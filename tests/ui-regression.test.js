@@ -45,7 +45,7 @@ assert.match(html, /Защищённая подписка будет подкл�
 assert.match(html, /Подбирайте точки без подписки/);
 assert.match(html, /Загружаем справочные данные/);
 assert.match(html, /assets\/gavrik\.js\?v=20260830-1/);
-assert.match(html, /assets\/app\.js\?v=20260830-4/);
+assert.match(html, /assets\/app\.js\?v=20260830-5/);
 assert.match(html, /assets\/layout-wide\.css\?v=20260830-1/);
 assert.match(html, /href="biological-age\.html"/);
 assert.match(html, /простой расчёт без лаборатории/);
@@ -151,16 +151,26 @@ assert.equal(data.symptoms['Псориаз'], undefined, 'Псориаз не д
 assert.ok(diagnoses['Псориаз'], 'Псориаз должен оставаться в списке диагнозов');
 const auditedAtlasPairs = {
   C6:'arm-inner',C7:'arm-inner',C9:'hand-back',
-  E41:'foot-top',E45:'foot-top',F2:'foot-top',F8:'leg-inner',
+  E34:'knee-side',E41:'foot-top',E45:'foot-top',F2:'foot-top',F6:'leg-inner',F8:'leg-inner',
   GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
-  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',R7:'leg-inner',RP8:'leg-inner',
-  TR3:'hand-back',V63:'foot-side',V65:'foot-side',V67:'foot-side',
-  VB36:'leg-front',VB43:'foot-top'
+  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',R1:'foot-side',R5:'foot-side',R7:'leg-inner',
+  RP2:'foot-top',RP5:'foot-side',RP8:'leg-inner',TR3:'hand-back',TR7:'arm-outer',TR10:'arm-outer',
+  V63:'foot-side',V65:'foot-side',V67:'foot-side',VB36:'leg-front',VB38:'leg-front',VB43:'foot-top'
 };
 for (const [code,image] of Object.entries(auditedAtlasPairs)) assert.match(app, new RegExp(`${code}:'${image.replace('.', '\\.')}'`));
-for (const unsupported of ['E34','F6','R1','R5','RP2','RP5','TR10','TR7','VB38']) assert.doesNotMatch(app, new RegExp(`${unsupported}:'`));
+const protocolPointCodes = new Set([
+  ...Object.values(data.toning_sedating).flatMap(actions => Object.values(actions).map(value => String(value).match(/^([^\s(]+)/)?.[1])),
+  ...Object.values(data.xi_points).map(value => String(value).match(/^([^\s(]+)/)?.[1])
+].filter(Boolean));
+assert.deepEqual([...protocolPointCodes].sort(), Object.keys(auditedAtlasPairs).sort(), 'Каждая возможная точка протокола должна иметь изображение');
+for (const image of new Set(Object.values(auditedAtlasPairs))) {
+  const file = image.includes('.') ? image : `${image}.webp`;
+  assert.ok(fs.existsSync(`assets/point-atlas/${file}`), `Нет файла атласа ${file}`);
+}
+assert.match(css, /#detailDialog\s*\{[^}]*width:\s*96vw[^}]*height:\s*94vh/);
+assert.match(css, /#detailDialog \.detail-image-frame\s*\{[^}]*width:\s*100%[^}]*height:\s*min\(72vh, 900px\)/);
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="reviewState"/);
 assert.match(validation, /Проверка завершена/);
