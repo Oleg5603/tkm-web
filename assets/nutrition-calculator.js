@@ -18,6 +18,7 @@ const mealOptions={
 
 const mealNames={breakfast:'Завтрак',lunch:'Обед',dinner:'Ужин'};
 const selects=[...document.querySelectorAll('[data-meal]')];
+const reviewInvite=document.querySelector('#reviewInvite');
 
 function renderMeal(meal,select){
   const option=mealOptions[meal][Number(select.value)||0];
@@ -34,6 +35,9 @@ function renderSummary(){
 
 selects.forEach(select=>{
   mealOptions[select.dataset.meal].forEach((option,index)=>select.add(new Option(option.name,String(index))));
-  select.addEventListener('change',renderSummary);
+  select.addEventListener('change',()=>{
+    renderSummary();
+    if(reviewInvite)reviewInvite.hidden=false;
+  });
 });
 renderSummary();

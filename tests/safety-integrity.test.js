@@ -2,7 +2,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 
-const pages=['index.html','topics.html','validation.html','privacy.html','terms.html'];
+const pages=['index.html','topics.html','validation.html','privacy.html','terms.html','reviews.html'];
 for(const page of pages){
   const html=fs.readFileSync(page,'utf8');
   assert.match(html,/Content-Security-Policy/,`${page}: нет CSP`);

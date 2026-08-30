@@ -9,12 +9,16 @@ const css = fs.readFileSync('assets/landing.css', 'utf8');
 const wideCss = fs.readFileSync('assets/layout-wide.css', 'utf8');
 const app = fs.readFileSync('assets/app.js', 'utf8');
 const nutrition = fs.readFileSync('assets/nutrition-calculator.js', 'utf8');
+const topicsCss = fs.readFileSync('assets/topics.css', 'utf8');
 const data = JSON.parse(fs.readFileSync('assets/tkm-engine-data.json', 'utf8'));
 const diagnoses = JSON.parse(fs.readFileSync('assets/diagnoses-data.json', 'utf8'));
 const privacy = fs.readFileSync('privacy.html', 'utf8');
 const terms = fs.readFileSync('terms.html', 'utf8');
 const bioage = fs.readFileSync('biological-age.html', 'utf8');
 const bioageJs = fs.readFileSync('assets/biological-age.js', 'utf8');
+const reviews = fs.readFileSync('reviews.html', 'utf8');
+const reviewsJs = fs.readFileSync('assets/reviews.js', 'utf8');
+const reviewsCss = fs.readFileSync('assets/reviews.css', 'utf8');
 
 assert.match(html, /data-mode="diagnosis"/);
 assert.doesNotMatch(html, /data-mode="diagnosis"[^>]*disabled/);
@@ -75,8 +79,12 @@ assert.match(topics, /Питание, с которым можно жить ка
 assert.match(topics, /assets\/nutrition-calculator\.js/);
 assert.match(topics, /data-meal="breakfast"/);
 assert.match(topics, /не учитывает аллергии, лекарства и заболевания/);
+assert.match(topics, /reviews\.html\?topic=malakhova/);
+assert.match(topics, /id="reviewInvite" hidden/);
 assert.match(nutrition, /const mealOptions=/);
 for (const meal of ['breakfast','lunch','dinner']) assert.match(nutrition, new RegExp(`${meal}:\\[`));
+assert.match(nutrition, /reviewInvite\.hidden=false/);
+assert.match(topicsCss, /\.review-invite\[hidden\]\{display:none!important\}/);
 assert.match(topics, /Три занятия в неделю/);
 assert.match(topics, /150–300 минут/);
 for (const method of ['Акупрессура','Электропунктура по методу Леднёва','Шарики, семена','Лазерное воздействие','Воздействие полынной сигарой']) assert.match(topics, new RegExp(method));
@@ -86,7 +94,16 @@ for (const page of [html, validation, topics]) {
   assert.match(page, /assets\/accessibility\.css/);
 }
 assert.match(privacy, /Конфиденциальность/);
-assert.match(privacy, /Показатели PhenoAge и простого расчёта выносливости обрабатываются локально, не сохраняются/);
+assert.match(privacy, /Расчёты ТКМ и биологического возраста/);
+assert.match(privacy, /FormSubmit/);
+assert.match(reviews, /name="Оценка" value="1" required/);
+assert.equal((reviews.match(/name="Оценка"/g) || []).length, 5, 'Форма должна содержать пять оценок');
+assert.match(reviews, /name="Разрешение на публикацию"/);
+assert.match(reviews, /Согласен на отправку данных владельцу сайта/);
+assert.match(reviews, /https:\/\/formsubmit\.co\/ogp56@bk\.ru/);
+assert.match(reviewsJs, /https:\/\/formsubmit\.co\/ajax\/ogp56@bk\.ru/);
+assert.match(reviewsJs, /params\.get\('admin'\)==='1'/);
+assert.match(reviewsCss, /\.review-details\[hidden\]/);
 assert.match(terms, /Условия использования/);
 assert.match(terms, /исследовательскую оценку фенотипического возраста/);
 assert.match(terms, /публичный расчёт формирует справочный список/);

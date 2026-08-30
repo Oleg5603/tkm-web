@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Оставить отзыв — ТКМ</title>
+  <meta name="description" content="Форма обратной связи о приложении ТКМ и материалах по системе Татьяны Малаховой.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action https://formsubmit.co">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/landing.css?v=20260830-5">
+  <link rel="stylesheet" href="assets/reviews.css?v=20260830-1">
+  <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
+</head>
+<body class="review-page">
+  <a class="skip-link" href="#mainContent">Перейти к содержанию</a>
+  <header class="site-header"><div class="wrap nav"><a class="brand" href="index.html"><span>Т</span>ТКМ</a><nav aria-label="Основная навигация"><a href="topics.html#nutrition">Питание по Малаховой</a><a href="index.html#picker">Подбор точек</a></nav><a class="nav-action" href="topics.html#nutrition">Вернуться к материалам</a></div></header>
+
+  <main id="mainContent" class="review-main">
+    <section class="review-hero wrap" aria-labelledby="reviewTitle">
+      <div class="review-intro"><p class="eyebrow dark">Обратная связь · около минуты</p><h1 id="reviewTitle"><span id="reviewGreeting">Спасибо, что заглянули.</span> Что вам запомнилось?</h1><p>Ваш отзыв поможет сделать материалы о ТКМ и питании понятнее. Здесь можно одинаково честно написать и о хорошем впечатлении, и о том, что стоит исправить.</p><ul><li>Отзыв сначала увидит только автор сайта</li><li>Публикация — только с вашего разрешения</li><li>Медицинские данные указывать не нужно</li></ul></div>
+
+      <div class="review-panel">
+        <form id="reviewForm" action="https://formsubmit.co/ogp56@bk.ru" method="post">
+          <input type="hidden" name="_subject" value="Новый отзыв о сайте ТКМ">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://oleg5603.github.io/tkm-web/reviews.html?sent=1">
+          <input type="hidden" name="_url" value="https://oleg5603.github.io/tkm-web/reviews.html">
+          <input type="hidden" name="Раздел" id="reviewTopic" value="ТКМ">
+          <input type="hidden" name="Источник приглашения" id="reviewSource" value="прямая ссылка">
+          <label class="honey-field" aria-hidden="true">Не заполняйте это поле<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+
+          <fieldset class="rating-fieldset">
+            <legend><span>Шаг 1 из 2</span>Какое у вас впечатление?</legend>
+            <div class="rating-options" role="radiogroup" aria-describedby="ratingHint">
+              <label><input type="radio" name="Оценка" value="1" required><span aria-hidden="true">★</span><small>1</small></label>
+              <label><input type="radio" name="Оценка" value="2"><span aria-hidden="true">★</span><small>2</small></label>
+              <label><input type="radio" name="Оценка" value="3"><span aria-hidden="true">★</span><small>3</small></label>
+              <label><input type="radio" name="Оценка" value="4"><span aria-hidden="true">★</span><small>4</small></label>
+              <label><input type="radio" name="Оценка" value="5"><span aria-hidden="true">★</span><small>5</small></label>
+            </div>
+            <p id="ratingHint" class="rating-hint">Нажмите на подходящую оценку — откроется короткая форма.</p>
+          </fieldset>
+
+          <div class="review-details" id="reviewDetails" hidden>
+            <p class="step-label">Шаг 2 из 2 · Пара слов от вас</p>
+            <label>Имя или псевдоним <span>необязательно</span><input id="reviewName" name="Имя" maxlength="80" autocomplete="name" placeholder="Как к вам обращаться?"></label>
+            <label>Ваш отзыв<textarea id="reviewText" name="Отзыв" minlength="20" maxlength="2000" required placeholder="Что понравилось? Чего не хватило? Что стоит объяснить проще?"></textarea></label>
+            <label>Email для ответа <span>необязательно</span><input type="email" name="email" maxlength="160" autocomplete="email" placeholder="Если хотите получить ответ"></label>
+            <label class="check-row"><input type="checkbox" name="Разрешение на публикацию" value="Да"><span><b>Можно опубликовать мой отзыв</b><small>Имя или псевдоним можно указать выше. Email никогда не публикуется.</small></span></label>
+            <label class="check-row privacy-check"><input type="checkbox" required><span><b>Согласен на отправку данных владельцу сайта</b><small>Для доставки используется FormSubmit. Подробнее — в <a href="privacy.html">политике конфиденциальности</a>.</small></span></label>
+            <button class="button review-submit" type="submit">Отправить отзыв</button>
+            <p class="form-status" id="reviewStatus" aria-live="polite"></p>
+            <a class="fallback-link" id="reviewFallback" href="mailto:ogp56@bk.ru?subject=Отзыв%20о%20сайте%20ТКМ" hidden>Отправить отзыв обычным письмом</a>
+          </div>
+        </form>
+
+        <section class="review-success" id="reviewSuccess" hidden tabindex="-1"><span aria-hidden="true">✓</span><h2>Спасибо. Отзыв отправлен.</h2><p>Он поможет понять, что уже работает хорошо, а что стоит улучшить.</p><a class="button" href="topics.html#nutrition">Вернуться к материалам</a></section>
+      </div>
+    </section>
+
+    <section class="request-builder wrap" id="requestBuilder" hidden aria-labelledby="builderTitle">
+      <div><p class="eyebrow dark">Для владельца сайта</p><h2 id="builderTitle">Персональная ссылка на отзыв</h2><p>Введите имя — получится готовая ссылка и короткое приглашение для мессенджера. Контактные данные здесь не сохраняются.</p></div>
+      <div class="builder-panel"><label>Имя посетителя<input id="inviteName" maxlength="80" placeholder="Например, Елена"></label><label>Готовая ссылка<input id="inviteLink" readonly></label><textarea id="inviteMessage" readonly aria-label="Текст приглашения"></textarea><div><button class="button" id="copyInvite" type="button">Скопировать приглашение</button><button class="button builder-secondary" id="shareInvite" type="button">Поделиться</button></div><p id="builderStatus" aria-live="polite"></p></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-grid"><div><a class="brand inverse" href="index.html"><span>Т</span>ТКМ</a><p>Настоящая обратная связь помогает сайту становиться полезнее.</p></div><div class="metrics"><a href="privacy.html">Конфиденциальность</a><a href="terms.html">Условия использования</a></div></div></footer>
+  <script src="assets/reviews.js?v=20260830-1" defer></script>
+</body>
+</html>
