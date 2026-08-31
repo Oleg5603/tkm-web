@@ -96,7 +96,7 @@ const pointAtlas={
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
   P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',
-  R1:'foot-side',R5:'foot-side',R7:'leg-inner',
+  R1:'foot-side',R5:'foot-side',R7:'r7-fuliu.svg',
   RP2:'foot-top',RP5:'foot-side',RP8:'leg-inner',
   TR3:'hand-back',TR7:'arm-outer',TR10:'arm-outer',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
@@ -112,7 +112,11 @@ function atlasPhoto(code){
   const image=pointAtlas[code];
   if(!image)return null;
   const src=image.includes('.')?`assets/point-atlas/${image}`:`assets/point-atlas/${image}.webp`;
-  return {src,orientation:code==='P9'?'scale-85':atlasRotation[image]||''};
+  const sourceNote=code==='R7'
+    ?'Учебная схема R7 по стандартному анатомическому ориентиру: перед ахилловым сухожилием, на 2 пропорциональных цуня выше внутренней лодыжки. Точную локализацию проверяет врач-рефлексотерапевт.'
+    :'Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.';
+  const orientation=code==='P9'?'scale-85':atlasRotation[image]||'';
+  return {src,orientation,sourceNote};
 }
 
 function analyzeDiagnoses(selected){
@@ -191,7 +195,7 @@ function renderProtocol(){
 function showPoint(index){
   const point=state.protocol[index];if(!point)return;
   const photo=atlasPhoto(point.code);
-  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></div>`:''}<p class="source-note">Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.</p><h3>Почему точка в списке</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
+  $('#dialogContent').innerHTML=`<p class="eyebrow dark">${escapeHtml(point.meridianName)} · ${escapeHtml(point.pointType)}</p><h2>${escapeHtml(point.code)}${point.name?` · ${escapeHtml(point.name)}`:''}</h2>${photo?`<div class="detail-image-frame"><img class="detail-image ${photo.orientation}" src="${photo.src}" alt="Схема области точки ${escapeHtml(point.code)}"><strong class="point-focus-label">${escapeHtml(point.code)}</strong></div>`:''}<p class="source-note">${escapeHtml(photo?.sourceNote||'Проверенная схема точки пока не добавлена.')}</p><h3>Почему точка в списке</h3><p>${escapeHtml(point.rule)}</p><h3>Справочное описание</h3><p class="detail-text">${escapeHtml(point.pointDescription)}</p>`;
   $('#detailDialog').showModal();
 }
 
