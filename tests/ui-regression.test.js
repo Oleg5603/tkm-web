@@ -158,11 +158,11 @@ assert.match(app, /class="point-focus-label"/);
 assert.match(app, /const atlasRotation=/);
 assert.match(app, /GI11:'arm-outer'/);
 assert.match(app, /P9:'p9-wrist\.png'/);
-assert.match(app, /R7:'r7-fuliu\.svg'/);
-assert.match(app, /Учебная схема R7 по стандартному анатомическому ориентиру/);
+assert.match(app, /R7:'r7-fuliu\.jpg'/);
+assert.match(app, /Фото из личного учебного архива пользователя/);
 assert.match(css, /\.point-image img\.scale-85\s*\{[^}]*scale:\s*\.85/);
 assert.ok(fs.existsSync('assets/point-atlas/p9-wrist.png'), 'Нет отдельной фотографии запястья для P9');
-assert.ok(fs.existsSync('assets/point-atlas/r7-fuliu.svg'), 'Нет отдельной схемы R7 Фу-лю');
+assert.ok(fs.existsSync('assets/point-atlas/r7-fuliu.jpg'), 'Нет фото R7 Фу-лю из архива пользователя');
 assert.equal(data.symptoms['Псориаз'], undefined, 'Псориаз не должен отображаться как жалоба');
 assert.ok(diagnoses['Псориаз'], 'Псориаз должен оставаться в списке диагнозов');
 const auditedAtlasPairs = {
@@ -171,7 +171,7 @@ const auditedAtlasPairs = {
   GI11:'arm-outer',GI2:'hand-back',GI7:'hand-back',
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
-  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',R1:'foot-side',R5:'foot-side',R7:'r7-fuliu.svg',
+  P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',R1:'foot-side',R5:'foot-side',R7:'r7-fuliu.jpg',
   RP2:'foot-top',RP5:'foot-side',RP8:'leg-inner',TR3:'hand-back',TR7:'arm-outer',TR10:'arm-outer',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',VB36:'leg-front',VB38:'leg-front',VB43:'foot-top'
 };
@@ -188,8 +188,7 @@ for (const image of new Set(Object.values(auditedAtlasPairs))) {
 assert.match(css, /#detailDialog\s*\{[^}]*width:\s*96vw[^}]*height:\s*94vh/);
 assert.match(css, /#detailDialog \.detail-image-frame\s*\{[^}]*width:\s*100%[^}]*height:\s*min\(58vh, 620px\)/);
 assert.match(css, /#detailDialog \.detail-image-frame \.detail-image\s*\{[^}]*height:\s*min\(58vh, 620px\)[^}]*max-height:\s*min\(58vh, 620px\)/);
-assert.match(app, /code==='R7'\?'diagram-portrait'/);
-assert.match(css, /#detailDialog \.detail-image-frame \.detail-image\.diagram-portrait\s*\{[^}]*width:\s*auto[^}]*max-width:\s*100%/);
+assert.doesNotMatch(app, /code==='R7'\?'diagram-portrait'/);
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="reviewState"/);
 assert.match(validation, /Проверка завершена/);

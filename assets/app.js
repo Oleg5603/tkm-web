@@ -96,7 +96,7 @@ const pointAtlas={
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
   P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',
-  R1:'foot-side',R5:'foot-side',R7:'r7-fuliu.svg',
+  R1:'foot-side',R5:'foot-side',R7:'r7-fuliu.jpg',
   RP2:'foot-top',RP5:'foot-side',RP8:'leg-inner',
   TR3:'hand-back',TR7:'arm-outer',TR10:'arm-outer',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
@@ -113,9 +113,9 @@ function atlasPhoto(code){
   if(!image)return null;
   const src=image.includes('.')?`assets/point-atlas/${image}`:`assets/point-atlas/${image}.webp`;
   const sourceNote=code==='R7'
-    ?'Учебная схема R7 по стандартному анатомическому ориентиру: перед ахилловым сухожилием, на 2 пропорциональных цуня выше внутренней лодыжки. Точную локализацию проверяет врач-рефлексотерапевт.'
+    ?'Фото из личного учебного архива пользователя: на схеме отмечены R7, R8 и соседние анатомические ориентиры. Точную локализацию R7 Фу-лю проверяет врач-рефлексотерапевт.'
     :'Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.';
-  const orientation=code==='P9'?'scale-85':code==='R7'?'diagram-portrait':atlasRotation[image]||'';
+  const orientation=code==='P9'?'scale-85':atlasRotation[image]||'';
   return {src,orientation,sourceNote};
 }
 
