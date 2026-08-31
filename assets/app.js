@@ -96,7 +96,7 @@ const pointAtlas={
   IG3:'hand-back',IG6:'hand-back',IG8:'arm-outer',
   MC4:'arm-inner',MC7:'arm-inner',MC9:'hand-back',
   P5:'arm-inner',P6:'arm-inner',P9:'p9-wrist.png',
-  R1:'foot-side',R5:'foot-side',R7:'r7-fuliu-photo-20260831.jpg',
+  R1:'foot-side',R5:'foot-side',R7:'r7-fuliu-enhanced-20260831.png',
   RP2:'foot-top',RP5:'foot-side',RP8:'leg-inner',
   TR3:'hand-back',TR7:'arm-outer',TR10:'arm-outer',
   V63:'foot-side',V65:'foot-side',V67:'foot-side',
