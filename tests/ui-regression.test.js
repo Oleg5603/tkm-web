@@ -45,7 +45,7 @@ assert.match(html, /Защищённая подписка будет подкл�
 assert.match(html, /Подбирайте точки без подписки/);
 assert.match(html, /Загружаем справочные данные/);
 assert.match(html, /assets\/gavrik\.js\?v=20260830-1/);
-assert.match(html, /assets\/app\.js\?v=20260831-2/);
+assert.match(html, /assets\/app\.js\?v=20260831-3/);
 assert.match(html, /assets\/landing\.css\?v=20260831-2/);
 assert.match(html, /assets\/layout-wide\.css\?v=20260830-1/);
 assert.match(html, /href="biological-age\.html"/);
