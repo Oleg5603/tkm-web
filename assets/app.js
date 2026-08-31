@@ -115,7 +115,7 @@ function atlasPhoto(code){
   const sourceNote=code==='R7'
     ?'Учебная схема R7 по стандартному анатомическому ориентиру: перед ахилловым сухожилием, на 2 пропорциональных цуня выше внутренней лодыжки. Точную локализацию проверяет врач-рефлексотерапевт.'
     :'Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.';
-  const orientation=code==='P9'?'scale-85':atlasRotation[image]||'';
+  const orientation=code==='P9'?'scale-85':code==='R7'?'diagram-portrait':atlasRotation[image]||'';
   return {src,orientation,sourceNote};
 }
 

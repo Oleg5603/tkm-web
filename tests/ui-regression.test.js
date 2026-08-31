@@ -45,8 +45,8 @@ assert.match(html, /Защищённая подписка будет подкл�
 assert.match(html, /Подбирайте точки без подписки/);
 assert.match(html, /Загружаем справочные данные/);
 assert.match(html, /assets\/gavrik\.js\?v=20260830-1/);
-assert.match(html, /assets\/app\.js\?v=20260831-1/);
-assert.match(html, /assets\/landing\.css\?v=20260831-1/);
+assert.match(html, /assets\/app\.js\?v=20260831-2/);
+assert.match(html, /assets\/landing\.css\?v=20260831-2/);
 assert.match(html, /assets\/layout-wide\.css\?v=20260830-1/);
 assert.match(html, /href="biological-age\.html"/);
 assert.match(html, /простой расчёт без лаборатории/);
@@ -186,7 +186,10 @@ for (const image of new Set(Object.values(auditedAtlasPairs))) {
   assert.ok(fs.existsSync(`assets/point-atlas/${file}`), `Нет файла атласа ${file}`);
 }
 assert.match(css, /#detailDialog\s*\{[^}]*width:\s*96vw[^}]*height:\s*94vh/);
-assert.match(css, /#detailDialog \.detail-image-frame\s*\{[^}]*width:\s*100%[^}]*height:\s*min\(72vh, 900px\)/);
+assert.match(css, /#detailDialog \.detail-image-frame\s*\{[^}]*width:\s*100%[^}]*height:\s*min\(58vh, 620px\)/);
+assert.match(css, /#detailDialog \.detail-image-frame \.detail-image\s*\{[^}]*height:\s*min\(58vh, 620px\)[^}]*max-height:\s*min\(58vh, 620px\)/);
+assert.match(app, /code==='R7'\?'diagram-portrait'/);
+assert.match(css, /#detailDialog \.detail-image-frame \.detail-image\.diagram-portrait\s*\{[^}]*width:\s*auto[^}]*max-width:\s*100%/);
 assert.match(validation, /id="reviewProgress"/);
 assert.match(validation, /id="reviewState"/);
 assert.match(validation, /Проверка завершена/);
