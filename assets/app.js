@@ -115,7 +115,7 @@ function atlasPhoto(code){
   const sourceNote=code==='R7'
     ?'Фото из личного учебного архива пользователя: на схеме отмечены R7, R8 и соседние анатомические ориентиры. Точную локализацию R7 Фу-лю проверяет врач-рефлексотерапевт.'
     :'Фото из личного учебного архива пользователя. Цветная метка показывает выбранный код; точную локализацию и обозначение сверяйте с исходной схемой.';
-  const orientation=code==='P9'?'scale-85':atlasRotation[image]||'';
+  const orientation=atlasRotation[image]||'';
   return {src,orientation,sourceNote};
 }
 

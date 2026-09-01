@@ -487,7 +487,6 @@
 
 .point-image img.rotate-90 { rotate: 90deg; scale: .72; }
 .point-image img.rotate-180 { rotate: 180deg; }
-.point-image img.scale-85 { scale: .85; }
 .point-image img.diagram-portrait { width: auto; max-width: 100%; min-height: 0; margin-inline: auto; }
 
 .point-image:hover img { transform: scale(1.025); }
@@ -497,7 +496,6 @@
 .detail-image-frame .detail-image { display: block; width: 100%; max-width: 100%; height: 360px; object-fit: contain; object-position: center; background: #f2eee4; }
 .detail-image-frame .detail-image.rotate-90 { rotate: 90deg; scale: .72; }
 .detail-image-frame .detail-image.rotate-180 { rotate: 180deg; }
-.detail-image-frame .detail-image.scale-85 { scale: .85; }
 
 .point-image.placeholder {
   display: grid;

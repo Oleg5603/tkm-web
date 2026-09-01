@@ -160,7 +160,7 @@ assert.match(app, /GI11:'arm-outer'/);
 assert.match(app, /P9:'p9-wrist\.png'/);
 assert.match(app, /R7:'r7-fuliu-enhanced-20260831\.png'/);
 assert.match(app, /Фото из личного учебного архива пользователя/);
-assert.match(css, /\.point-image img\.scale-85\s*\{[^}]*scale:\s*\.85/);
+assert.doesNotMatch(app, /code==='P9'\?'scale-85'/, 'P9 не должна дополнительно уменьшаться в карточке');
 assert.ok(fs.existsSync('assets/point-atlas/p9-wrist.png'), 'Нет отдельной фотографии запястья для P9');
 assert.ok(fs.existsSync('assets/point-atlas/r7-fuliu-enhanced-20260831.png'), 'Нет осветлённого фото R7 Фу-лю из архива пользователя');
 assert.equal(data.symptoms['Псориаз'], undefined, 'Псориаз не должен отображаться как жалоба');
