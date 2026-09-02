@@ -9,7 +9,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://mc.yandex.ru; script-src 'self' https://mc.yandex.ru; style-src 'self'; connect-src 'self' https://mc.yandex.ru; object-src 'none'; base-uri 'self'; form-action 'self'">
   <link rel="stylesheet" href="assets/styles.css?v=20260825-1">
-  <link rel="stylesheet" href="assets/landing.css?v=20260831-2">
+  <link rel="stylesheet" href="assets/landing.css?v=20260902-1">
   <link rel="stylesheet" href="assets/layout-wide.css?v=20260830-1">
   <link rel="stylesheet" href="assets/accessibility.css?v=20260825-1">
   <script src="assets/metrika.js?v=20260902-1" defer></script>
@@ -41,6 +41,7 @@
           <div class="gavrik-question-row"><input id="gavrikQuestion" maxlength="500" required placeholder="Например: что такое Инь и Ян?"><button type="submit">Спросить</button></div>
           <div class="gavrik-prompts" aria-label="Примеры вопросов Гаврику"><button type="button" data-gavrik-question="Какие основные принципы ТКМ?">Основы ТКМ</button><button type="button" data-gavrik-question="Что такое Инь и Ян?">Инь–Ян</button><button type="button" data-gavrik-question="Как работают пять фаз У-син?">У-син</button><button type="button" data-gavrik-question="Что такое Ци?">Ци</button><button type="button" data-gavrik-question="Что такое меридианы?">Меридианы</button><button type="button" data-gavrik-question="Что означают восемь принципов?">8 принципов</button></div>
           <p id="gavrikAnswer" class="gavrik-answer" aria-live="polite">Гаврик готов ответить.</p>
+          <div id="gavrikLinks" class="gavrik-links" aria-label="Полезные ссылки"></div>
         </form>
       </div>
     </section>
@@ -182,7 +183,7 @@
   <dialog id="detailDialog" class="dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><div id="dialogContent"></div></dialog>
   <dialog id="exportDialog" class="dialog export-dialog"><button class="dialog-close" data-close-dialog aria-label="Закрыть">×</button><p class="eyebrow dark">Готово к сохранению</p><h2>Скачать список</h2><p>Выберите удобный формат. В документ войдут жалобы, приоритетные меридианы, точки и объяснения правил.</p><div class="export-options"><button type="button" data-export="txt"><b>TXT</b><span>Простой текст</span></button><button type="button" data-export="word"><b>Word</b><span>Текстовый документ</span></button><button type="button" data-export="pdf"><b>PDF</b><span>Печать или сохранение</span></button></div></dialog>
   <script src="assets/protocol-utils.js?v=20260826-1" defer></script>
-  <script src="assets/gavrik.js?v=20260830-1" defer></script>
-  <script src="assets/app.js?v=20260831-3" defer></script>
+  <script src="assets/gavrik.js?v=20260902-1" defer></script>
+  <script src="assets/app.js?v=20260902-1" defer></script>
 </body>
 </html>

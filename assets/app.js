@@ -249,7 +249,15 @@ const gavrikForm=document.querySelector('#gavrikForm');
 gavrikForm?.addEventListener('submit',event=>{
   event.preventDefault();
   const question=document.querySelector('#gavrikQuestion').value.trim();
-  document.querySelector('#gavrikAnswer').textContent=window.GavrikUtils.answer(question);
+  const response=window.GavrikUtils.respond(question);
+  document.querySelector('#gavrikAnswer').textContent=response.text;
+  const links=document.querySelector('#gavrikLinks');
+  links.replaceChildren(...response.links.map(item=>{
+    const link=document.createElement('a');
+    link.href=item.href;
+    link.textContent=`${item.label} →`;
+    return link;
+  }));
 });
 
 document.querySelectorAll('[data-gavrik-question]').forEach(button=>button.addEventListener('click',()=>{

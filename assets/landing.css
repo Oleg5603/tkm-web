@@ -812,6 +812,10 @@
   #detailDialog .detail-image-frame .detail-image { height: 52vh; max-height: 52vh; }
 }
 .gavrik-form .gavrik-answer { min-height: 1.45em; color: #fff; line-height: 1.5; }
+.gavrik-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.gavrik-links:empty { display: none; }
+.gavrik-links a { border: 1px solid #f5d78880; border-radius: 999px; padding: 7px 11px; color: #f5d788; font-size: .78rem; font-weight: 800; text-decoration: none; }
+.gavrik-links a:hover, .gavrik-links a:focus-visible { color: #153d35; background: #f5d788; }
 .doctor-about { display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 48px; align-items: center; padding-top: 72px; padding-bottom: 72px; }
 .doctor-about img { width: 100%; max-height: 430px; object-fit: cover; object-position: 50% 28%; border-radius: 24px; box-shadow: 0 22px 60px #153c3530; }
 .doctor-about h2 { margin: 8px 0 10px; }
